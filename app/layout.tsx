@@ -4,6 +4,7 @@ import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FloatingButtons from '@/components/common/FloatingButtons';
+import { ClientProviders } from './providers';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -60,21 +61,23 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${inter.className} antialiased`}>
-        <div className="flex flex-col min-h-screen">
-          {/* Header */}
-          <Navbar />
+        <ClientProviders>
+          <div className="flex flex-col min-h-screen">
+            {/* Header */}
+            <Navbar />
 
-          {/* Main Content */}
-          <main className="flex-grow bg-gray-50">
-            {children}
-          </main>
+            {/* Main Content */}
+            <main className="flex-grow bg-gray-50">
+              {children}
+            </main>
 
-          {/* Footer */}
-          <Footer />
-        </div>
+            {/* Footer */}
+            <Footer />
+          </div>
 
-        {/* Floating Buttons (WhatsApp & Scroll to Top) */}
-        <FloatingButtons />
+          {/* Floating Buttons (WhatsApp & Scroll to Top) */}
+          <FloatingButtons />
+        </ClientProviders>
       </body>
     </html>
   );
