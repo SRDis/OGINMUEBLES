@@ -1,7 +1,16 @@
+'use client'; // Necesario para usar usePathname
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const pathname = usePathname();
+
+  // Si la ruta comienza con /admin, no renderiza nada
+  if (pathname.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <footer className="bg-[#050505] text-gray-400 border-t border-white/5 font-sans relative overflow-hidden">
@@ -15,26 +24,18 @@ export default function Footer() {
           {/* 1. COMPANY INFO & BRANDING */}
           <div className="col-span-1 md:col-span-2 pr-0 md:pr-12">
             <Link href="/" className="flex items-center gap-3 mb-6 group w-fit">
-              {/* Usamos tu imagen de logo, asegúrate que sea un PNG transparente de alta calidad */}
               <img 
                 src="/logo-white.png" 
                 alt="Luxury Estate Logo" 
                 className="h-10 w-auto brightness-200 contrast-125" 
               />
-              {/* Opcional: Si quieres reforzar con texto como en el Navbar */}
-              {/* <div className="flex flex-col">
-                <span className="text-white font-light tracking-[0.3em] text-xs leading-none uppercase">
-                  LUXURY<span className="font-bold">ESTATE</span>
-                </span>
-              </div> 
-              */}
             </Link>
             
             <p className="text-sm font-light leading-relaxed mb-8 max-w-sm text-gray-500">
               Tu socio confiable en inversiones de alto valor. Encontramos la propiedad que define tu legado con un servicio de auditoría y gestión impecable.
             </p>
            
-            {/* SOCIAL ICONS (Estilo Minimalista) */}
+            {/* SOCIAL ICONS */}
             <div className="flex space-x-5">
               {[
                 { name: 'Facebook', url: 'https://facebook.com', path: 'M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z' },

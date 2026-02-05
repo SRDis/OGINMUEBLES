@@ -35,7 +35,6 @@ export default function AdminContactsTable() {
     try {
       setLoading(true);
       
-      // Fetch contacts
       let query = supabase
         .from('contact_requests')
         .select('*')
@@ -50,7 +49,6 @@ export default function AdminContactsTable() {
 
       setContacts(contactsData || []);
 
-      // Fetch properties for property_id references
       const propertyIds = [...new Set(contactsData?.map(c => c.property_id).filter(Boolean))];
       if (propertyIds.length > 0) {
         const { data: propertiesData, error: propertiesError } = await supabase
@@ -81,7 +79,6 @@ export default function AdminContactsTable() {
         .eq('id', id);
 
       if (error) throw error;
-
       fetchContacts();
     } catch (error) {
       console.error('Error updating status:', error);
@@ -99,7 +96,6 @@ export default function AdminContactsTable() {
         .eq('id', id);
 
       if (error) throw error;
-
       alert('Contacto eliminado exitosamente');
       fetchContacts();
     } catch (error) {
@@ -119,6 +115,13 @@ export default function AdminContactsTable() {
     });
   };
 
+  // Helper para generar link de WhatsApp limpio
+  const getWhatsAppUrl = (phone: string) => {
+    // Elimina todo lo que no sea número
+    const cleanPhone = phone.replace(/\D/g, ''); 
+    return `https://wa.me/${cleanPhone}`;
+  };
+
   if (loading) {
     return (
       <div className="bg-white rounded-lg shadow-md p-12 text-center">
@@ -130,75 +133,36 @@ export default function AdminContactsTable() {
   return (
     <>
       <div className="bg-white rounded-lg shadow-md">
-        {/* Filters */}
+        {/* Filtros */}
         <div className="p-4 border-b">
           <div className="flex flex-wrap gap-2">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                filter === 'all'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Todos ({contacts.length})
-            </button>
-            <button
-              onClick={() => setFilter('pending')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                filter === 'pending'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Pendientes
-            </button>
-            <button
-              onClick={() => setFilter('contacted')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                filter === 'contacted'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Contactados
-            </button>
-            <button
-              onClick={() => setFilter('closed')}
-              className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                filter === 'closed'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              Cerrados
-            </button>
+            {(['all', 'pending', 'contacted', 'closed'] as const).map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`px-4 py-2 rounded-md font-medium transition-colors capitalize ${
+                  filter === f
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {f === 'all' ? `Todos (${contacts.length})` : f}
+              </button>
+            ))}
           </div>
         </div>
 
-        {/* Table */}
+        {/* Tabla */}
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 border-b">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Cliente
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contacto
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Propiedad
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Fecha
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Estado
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Acciones
-                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones de Contacto</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Propiedad</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Opciones</th>
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -210,20 +174,39 @@ export default function AdminContactsTable() {
                         <div className="font-medium text-gray-900">{contact.name}</div>
                         <button
                           onClick={() => setSelectedContact(contact)}
-                          className="text-sm text-blue-600 hover:text-blue-800"
+                          className="text-xs text-blue-600 hover:text-blue-800 font-medium flex items-center gap-1 mt-1"
                         >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                           Ver mensaje
                         </button>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm">
-                        <a href={`mailto:${contact.email}`} className="text-blue-600 hover:text-blue-800 block">
-                          {contact.email}
-                        </a>
-                        <a href={`tel:${contact.phone}`} className="text-gray-600 hover:text-gray-900 block">
-                          {contact.phone}
-                        </a>
+                      <div className="flex flex-col space-y-2">
+                        {/* Email Row */}
+                        <div className="flex items-center justify-between group">
+                          <span className="text-sm text-gray-600 truncate max-w-[150px]">{contact.email}</span>
+                          <a 
+                            href={`mailto:${contact.email}`} 
+                            className="p-1.5 bg-blue-100 text-blue-600 rounded-full hover:bg-blue-600 hover:text-white transition-colors"
+                            title="Enviar correo"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                          </a>
+                        </div>
+                        {/* Phone Row */}
+                        <div className="flex items-center justify-between group">
+                          <span className="text-sm text-gray-600">{contact.phone}</span>
+                          <a 
+                            href={getWhatsAppUrl(contact.phone)} 
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1.5 bg-green-100 text-green-600 rounded-full hover:bg-green-600 hover:text-white transition-colors"
+                            title="Enviar WhatsApp"
+                          >
+                            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487 2.082.899 2.503.719 2.949.676.446-.043 1.436-.587 1.639-1.153.204-.566.204-1.05.143-1.154z"/></svg>
+                          </a>
+                        </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 text-sm">
@@ -231,12 +214,13 @@ export default function AdminContactsTable() {
                         <Link
                           href={`/propiedades/${contact.property_id}`}
                           target="_blank"
-                          className="text-blue-600 hover:text-blue-800"
+                          className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
                         >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
                           {properties[contact.property_id]?.title || 'Ver propiedad'}
                         </Link>
                       ) : (
-                        <span className="text-gray-500">Consulta general</span>
+                        <span className="text-gray-500 italic">Consulta general</span>
                       )}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-900">
@@ -246,7 +230,7 @@ export default function AdminContactsTable() {
                       <select
                         value={contact.status}
                         onChange={(e) => updateStatus(contact.id, e.target.value as any)}
-                        className={`text-xs font-semibold rounded-full px-3 py-1 border-0 focus:ring-2 focus:ring-blue-500 ${
+                        className={`text-xs font-semibold rounded-full px-3 py-1 border-0 focus:ring-2 focus:ring-blue-500 cursor-pointer ${
                           contact.status === 'pending'
                             ? 'bg-yellow-100 text-yellow-800'
                             : contact.status === 'contacted'
@@ -263,8 +247,9 @@ export default function AdminContactsTable() {
                       <button
                         onClick={() => deleteContact(contact.id, contact.name)}
                         className="text-red-600 hover:text-red-900"
+                        title="Eliminar contacto"
                       >
-                        Eliminar
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                       </button>
                     </td>
                   </tr>
@@ -281,79 +266,76 @@ export default function AdminContactsTable() {
         </div>
       </div>
 
-      {/* Modal for message details */}
+      {/* Modal Detalles */}
       {selectedContact && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">Detalles del Mensaje</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl transform transition-all">
+            <div className="p-6 border-b flex items-center justify-between bg-gray-50 rounded-t-lg">
+              <h3 className="text-xl font-bold text-gray-900">Mensaje de {selectedContact.name}</h3>
               <button
                 onClick={() => setSelectedContact(null)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"/>
                 </svg>
               </button>
             </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-500">Nombre</label>
-                <p className="text-gray-900 font-medium">{selectedContact.name}</p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Email</label>
-                <p className="text-gray-900">
-                  <a href={`mailto:${selectedContact.email}`} className="text-blue-600 hover:text-blue-800">
-                    {selectedContact.email}
-                  </a>
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Teléfono</label>
-                <p className="text-gray-900">
-                  <a href={`tel:${selectedContact.phone}`} className="text-blue-600 hover:text-blue-800">
-                    {selectedContact.phone}
-                  </a>
-                </p>
-              </div>
-              <div>
-                <label className="text-sm font-medium text-gray-500">Fecha</label>
-                <p className="text-gray-900">{formatDate(selectedContact.created_at)}</p>
-              </div>
-              {selectedContact.property_id && (
+            <div className="p-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Propiedad de Interés</label>
-                  <p className="text-gray-900">
-                    <Link
-                      href={`/propiedades/${selectedContact.property_id}`}
-                      target="_blank"
-                      className="text-blue-600 hover:text-blue-800"
-                    >
-                      {properties[selectedContact.property_id]?.title || 'Ver propiedad'}
-                    </Link>
-                  </p>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</label>
+                  <p className="text-gray-900 mt-1">{selectedContact.email}</p>
                 </div>
-              )}
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Teléfono</label>
+                  <p className="text-gray-900 mt-1">{selectedContact.phone}</p>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Fecha</label>
+                  <p className="text-gray-900 mt-1">{formatDate(selectedContact.created_at)}</p>
+                </div>
+                {selectedContact.property_id && (
+                  <div>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Interés en</label>
+                    <p className="text-blue-600 font-medium mt-1 truncate">
+                      {properties[selectedContact.property_id]?.title || 'Ver propiedad'}
+                    </p>
+                  </div>
+                )}
+              </div>
+              
               <div>
-                <label className="text-sm font-medium text-gray-500">Mensaje</label>
-                <p className="text-gray-900 whitespace-pre-wrap bg-gray-50 p-4 rounded-md">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">Mensaje del cliente</label>
+                <div className="bg-gray-50 p-4 rounded-lg border border-gray-100 text-gray-800 whitespace-pre-wrap leading-relaxed">
                   {selectedContact.message}
-                </p>
+                </div>
               </div>
             </div>
-            <div className="p-6 border-t flex justify-end space-x-3">
+            <div className="p-6 border-t bg-gray-50 rounded-b-lg flex flex-col sm:flex-row justify-end gap-3">
               <button
                 onClick={() => setSelectedContact(null)}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-white transition-colors font-medium"
               >
                 Cerrar
               </button>
+              
+              <a
+                href={getWhatsAppUrl(selectedContact.phone)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors flex items-center justify-center gap-2 font-medium"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487 2.082.899 2.503.719 2.949.676.446-.043 1.436-.587 1.639-1.153.204-.566.204-1.05.143-1.154z"/></svg>
+                WhatsApp
+              </a>
+
               <a
                 href={`mailto:${selectedContact.email}`}
-                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 font-medium"
               >
-                Responder por Email
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                Responder Email
               </a>
             </div>
           </div>
