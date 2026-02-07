@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import PropertyCard from './PropertyCard';
 import PropertyFilters, { FilterValues } from './PropertyFilters';
 import { supabase } from '@/lib/supabase';
+import { getRandomPropertyImageClient, getMainImageUrl } from '@/lib/cloudinary';
 
 interface Property {
   id: string;
@@ -13,9 +14,12 @@ interface Property {
   bedrooms: number;
   bathrooms: number;
   area: number;
+  parking_spaces?: number;
   property_type: string;
   status: 'venta' | 'renta';
   main_image_id: string | null;
+  ID_interno?: string | null;
+  internal_id?: string | null;
 }
 
 export default function PropertyList() {
@@ -23,6 +27,7 @@ export default function PropertyList() {
   const [filteredProperties, setFilteredProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
 
   // Cargar propiedades iniciales
   useEffect(() => {
@@ -49,6 +54,41 @@ export default function PropertyList() {
     }
   };
 
+  const loadRandomImages = async (props: Property[]) => {
+    const imagePromises = props.map(async (property) => {
+      const internalId = property.ID_interno || property.internal_id;
+      if (internalId && property.status) {
+        try {
+          const imageUrl = await getRandomPropertyImageClient(internalId, property.status);
+          if (imageUrl) {
+            return { propertyId: property.id, imageUrl };
+          }
+        } catch (error) {
+          console.error(`Error loading image for property ${property.id}:`, error);
+        }
+      }
+      // Fallback a main_image_id si no hay imagen aleatoria
+      if (property.main_image_id) {
+        return { propertyId: property.id, imageUrl: getMainImageUrl(property.main_image_id) };
+      }
+      return { propertyId: property.id, imageUrl: '/images/placeholder.jpg' };
+    });
+
+    const images = await Promise.all(imagePromises);
+    const imageMap: Record<string, string> = {};
+    images.forEach(({ propertyId, imageUrl }) => {
+      imageMap[propertyId] = imageUrl;
+    });
+    setImageUrls(imageMap);
+  };
+
+  // Cargar imágenes aleatorias de Cloudinary cuando cambian las propiedades
+  useEffect(() => {
+    if (properties.length > 0) {
+      loadRandomImages(properties);
+    }
+  }, [properties.map(p => p.id).join(',')]);
+
   // Aplicar filtros
   const handleFilterChange = (filters: FilterValues) => {
     let filtered = [...properties];
@@ -63,11 +103,34 @@ export default function PropertyList() {
       filtered = filtered.filter(p => p.property_type === filters.propertyType);
     }
 
-    // Filtro de ubicación
+    // Filtro de ubicación - Búsqueda flexible y no estricta
     if (filters.location) {
-      filtered = filtered.filter(p => 
-        p.location.toLowerCase().includes(filters.location.toLowerCase())
-      );
+      const searchTerms = filters.location
+        .toLowerCase()
+        .trim()
+        .split(/\s+/) // Dividir por espacios
+        .filter(term => term.length > 0); // Eliminar términos vacíos
+      
+      if (searchTerms.length > 0) {
+        filtered = filtered.filter(p => {
+          // Normalizar texto: quitar acentos y convertir a minúsculas
+          const normalize = (text: string) => 
+            text.toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Quitar acentos
+                .trim();
+          
+          const locationNormalized = normalize(p.location || '');
+          const addressNormalized = normalize((p as any).address || '');
+          
+          // Buscar si TODOS los términos están presentes en location o address
+          return searchTerms.every(term => {
+            const termNormalized = normalize(term);
+            return locationNormalized.includes(termNormalized) || 
+                   addressNormalized.includes(termNormalized);
+          });
+        });
+      }
     }
 
     // Filtro de precio mínimo
@@ -83,6 +146,26 @@ export default function PropertyList() {
     // Filtro de recámaras
     if (filters.bedrooms) {
       filtered = filtered.filter(p => p.bedrooms >= Number(filters.bedrooms));
+    }
+
+    // Filtro de baños
+    if (filters.bathrooms) {
+      filtered = filtered.filter(p => (p.bathrooms || 0) >= Number(filters.bathrooms));
+    }
+
+    // Filtro de estacionamientos
+    if (filters.parkingSpaces) {
+      filtered = filtered.filter(p => (p.parking_spaces || 0) >= Number(filters.parkingSpaces));
+    }
+
+    // Filtro de área mínima
+    if (filters.minArea) {
+      filtered = filtered.filter(p => (p.area || 0) >= Number(filters.minArea));
+    }
+
+    // Filtro de área máxima
+    if (filters.maxArea) {
+      filtered = filtered.filter(p => (p.area || 0) <= Number(filters.maxArea));
     }
 
     setFilteredProperties(filtered);
@@ -142,11 +225,7 @@ export default function PropertyList() {
               bedrooms={property.bedrooms}
               bathrooms={property.bathrooms}
               area={property.area}
-              imageUrl={
-                property.main_image_id
-                  ? `https://drive.google.com/thumbnail?id=${property.main_image_id}&sz=w1000`
-                  : '/images/placeholder.jpg'
-              }
+              imageUrl={imageUrls[property.id] || '/images/placeholder.jpg'}
               propertyType={property.property_type}
               status={property.status}
             />

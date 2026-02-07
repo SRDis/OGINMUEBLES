@@ -1,4 +1,5 @@
 import PropertyListFiltered from '@/components/property/PropertyListFiltered';
+import AMPISeal from '@/components/property/AMPISeal';
 
 export const metadata = {
   title: 'Luxury Rentals | Propiedades en Renta',
@@ -15,26 +16,31 @@ export default function RentaPage() {
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3 mb-6">
-              <span className="w-12 h-[1px] bg-[#22AADE]" />
-              <span className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase">
-                Estilo de Vida & Confort
-              </span>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="max-w-3xl">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="w-12 h-[1px] bg-[#22AADE]" />
+                <span className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase">
+                  Estilo de Vida & Confort
+                </span>
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-none mb-6">
+                Propiedades en <br />
+                <span className="font-bold italic text-white">Renta</span>
+              </h1>
+              
+              <p className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
+                Selección exclusiva de propiedades gestionadas bajo estándares de <span className="text-white font-medium">hospitalidad premium</span>. 
+                Encuentra el refugio perfecto con la seguridad de un proceso transparente.
+              </p>
             </div>
             
-            <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-none mb-6">
-              Propiedades en <br />
-              <span className="font-bold italic text-white">Renta</span>
-            </h1>
-            
-            <p className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
-              Selección exclusiva de propiedades gestionadas bajo estándares de <span className="text-white font-medium">hospitalidad premium</span>. 
-              Encuentra el refugio perfecto con la seguridad de un proceso transparente.
-            </p>
+            {/* Sello de Garantía AMPI */}
+            <div className="w-full md:w-auto flex justify-center md:justify-end md:border-l md:border-white/10 md:pl-8 md:pb-2">
+              <AMPISeal />
+            </div>
           </div>
-
-          
         </div>
         
       </header>

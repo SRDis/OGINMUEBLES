@@ -15,12 +15,23 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Función helper para obtener URL de imagen de Google Drive
-export function getGoogleDriveImageUrl(fileId: string): string {
-  return `https://drive.google.com/thumbnail?id=${fileId}&sz=w1000`;
+// Función helper para obtener URL de imagen de Cloudinary
+// Mantenemos compatibilidad con código legacy que pueda usar estas funciones
+export function getGoogleDriveImageUrl(publicId: string): string {
+  // Si es un public_id de Cloudinary, usar Cloudinary
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  if (cloudName && publicId && !publicId.startsWith('http')) {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/w_1000,h_1000,c_fill,q_auto/${publicId}`;
+  }
+  // Fallback a URL directa si ya es una URL completa
+  return publicId;
 }
 
-// Función alternativa para obtener URL directa
-export function getGoogleDriveDirectUrl(fileId: string): string {
-  return `https://drive.google.com/uc?export=view&id=${fileId}`;
+// Función alternativa para obtener URL directa (ahora de Cloudinary)
+export function getGoogleDriveDirectUrl(publicId: string): string {
+  const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+  if (cloudName && publicId && !publicId.startsWith('http')) {
+    return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
+  }
+  return publicId;
 }

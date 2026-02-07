@@ -1,4 +1,6 @@
 import PropertyList from '@/components/property/PropertyList';
+import PersonalizedSearchButton from '@/components/property/PersonalizedSearchButton';
+import AMPISeal from '@/components/property/AMPISeal';
 
 export const metadata = {
   title: 'Portafolio Inmobiliario Completo | Oliver López Guijoza',
@@ -32,10 +34,9 @@ export default function PropiedadesPage() {
               </p>
             </div>
             
-            {/* Contador / Badge de confianza (UX Trust) */}
-            <div className="hidden lg:block border-l border-white/10 pl-8 pb-2">
-              <img src="./logo_ampi-white.png" alt="Logo AMPI" className="w-40 h-auto mb-0" />
-              <p className="text-[#22AADE] text-[10px] uppercase tracking-widest font-medium ml-3">Sello de Garantía</p>
+            {/* Sello de Garantía AMPI */}
+            <div className="w-full md:w-auto flex justify-center md:justify-end mt-6 md:mt-0 md:border-l md:border-white/10 md:pl-8 md:pb-2">
+              <AMPISeal />
             </div>
           </div>
         </div>
@@ -65,9 +66,7 @@ export default function PropiedadesPage() {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4 md:justify-end">
-              <a href="/contacto" className="inline-block bg-white text-black text-center px-8 py-4 text-[11px] font-black uppercase tracking-widest hover:bg-[#22AADE] hover:text-black transition-all duration-300">
-                Solicitar Búsqueda Personalizada
-              </a>
+              <PersonalizedSearchButton />
             </div>
           </div>
         </div>

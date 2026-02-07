@@ -4,36 +4,75 @@ import './globals.css';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FloatingButtons from '@/components/common/FloatingButtons';
+import CookieBanner from '@/components/common/CookieBanner';
 import { ClientProviders } from './providers';
+import StructuredData from '@/components/seo/StructuredData';
 
 const inter = Inter({ subsets: ['latin'] });
 
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.oginmuebles.com';
+
 export const metadata: Metadata = {
-  title: 'Oliver L. Guijoza - Negocios Inmobiliarios',
-  description: 'Plataforma líder de bienes raíces en México. Encuentra casas, departamentos y propiedades en venta o renta. Asesoría profesional personalizada.',
-  keywords: 'bienes raíces, propiedades, casas, departamentos, venta, renta, México',
-  authors: [{ name: 'RealEstate' }],
+  metadataBase: new URL(baseUrl),
+  title: {
+    default: 'Oliver López Guijoza | Asesor Inmobiliario en Valle de Bravo y CDMX',
+    template: '%s | Oliver López Guijoza',
+  },
+  description: 'Asesor inmobiliario profesional certificado AMPI. Especialista en propiedades exclusivas en Valle de Bravo y Ciudad de México. Venta, renta e inversión inmobiliaria con asesoría personalizada y certeza jurídica.',
+  keywords: [
+    'Oliver López Guijoza',
+    'asesor inmobiliario',
+    'propiedades Valle de Bravo',
+    'bienes raíces CDMX',
+    'casas en venta',
+    'propiedades en renta',
+    'inversión inmobiliaria',
+    'AMPI',
+    'asesoría inmobiliaria profesional',
+    'propiedades exclusivas',
+    'Valle de Bravo real estate',
+    'inmobiliaria México',
+  ],
+  authors: [{ name: 'Oliver López Guijoza' }],
+  creator: 'Oliver López Guijoza',
+  publisher: 'Oliver López Guijoza',
+  alternates: {
+    canonical: baseUrl,
+  },
+  icons: {
+    icon: [
+      { url: '/og_icono.png', sizes: 'any' },
+      { url: '/og_icono.png', type: 'image/png', sizes: '32x32' },
+      { url: '/og_icono.png', type: 'image/png', sizes: '16x16' },
+      { url: '/og_icono.png', type: 'image/png', sizes: '192x192' },
+      { url: '/og_icono.png', type: 'image/png', sizes: '512x512' },
+    ],
+    apple: [
+      { url: '/og_icono.png', sizes: '180x180', type: 'image/png' },
+    ],
+  },
+  manifest: '/site.webmanifest',
   openGraph: {
     type: 'website',
     locale: 'es_MX',
-    url: 'https://www.realestate.com',
-    siteName: 'RealEstate',
-    title: 'RealEstate - Encuentra tu Propiedad Ideal',
-    description: 'Plataforma líder de bienes raíces en México',
+    url: baseUrl,
+    siteName: 'Oliver López Guijoza - Asesor Inmobiliario',
+    title: 'Oliver López Guijoza | Asesor Inmobiliario Profesional',
+    description: 'Asesor inmobiliario profesional certificado AMPI. Especialista en propiedades exclusivas en Valle de Bravo y Ciudad de México.',
     images: [
       {
-        url: '/images/og-image.jpg',
+        url: '/og_icono.png',
         width: 1200,
         height: 630,
-        alt: 'RealEstate',
+        alt: 'Oliver López Guijoza - Asesor Inmobiliario',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RealEstate - Encuentra tu Propiedad Ideal',
-    description: 'Plataforma líder de bienes raíces en México',
-    images: ['/images/og-image.jpg'],
+    title: 'Oliver López Guijoza | Asesor Inmobiliario Profesional',
+    description: 'Asesor inmobiliario profesional certificado AMPI. Especialista en propiedades exclusivas.',
+    images: ['/og_icono.png'],
   },
   robots: {
     index: true,
@@ -51,6 +90,12 @@ export const metadata: Metadata = {
     initialScale: 1,
     maximumScale: 5,
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: 'Oliver López Guijoza',
+  },
+  themeColor: '#050505',
 };
 
 export default function RootLayout({
@@ -77,7 +122,37 @@ export default function RootLayout({
 
           {/* Floating Buttons (WhatsApp & Scroll to Top) */}
           <FloatingButtons />
+          
+          {/* Cookie Banner */}
+          <CookieBanner />
         </ClientProviders>
+        
+        {/* Structured Data - LocalBusiness */}
+        <StructuredData
+          type="LocalBusiness"
+          data={{
+            name: 'Oliver López Guijoza - Asesor Inmobiliario',
+            image: `${baseUrl}/og_icono.png`,
+            '@id': baseUrl,
+            url: baseUrl,
+            telephone: '+52-55-XXXX-XXXX',
+            priceRange: '$$',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Valle de Bravo',
+              addressRegion: 'Estado de México',
+              addressCountry: 'MX',
+            },
+            geo: {
+              '@type': 'GeoCoordinates',
+              latitude: '19.1936',
+              longitude: '-100.1306',
+            },
+            sameAs: [
+              // Agregar redes sociales si las tienes
+            ],
+          }}
+        />
       </body>
     </html>
   );

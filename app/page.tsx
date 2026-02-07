@@ -1,25 +1,73 @@
 import Link from 'next/link';
-import PropertyCard from '@/components/property/PropertyCard';
 import { supabase } from '@/lib/supabase';
-import './globals.css'
+import { getRandomPropertyImage } from '@/lib/cloudinary';
+import { Metadata } from 'next';
+import FeaturedPropertiesCarousel from '@/components/property/FeaturedPropertiesCarousel';
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.oliverlguijoza.com';
+
+export const metadata: Metadata = {
+  title: 'Inicio',
+  description: 'Asesor inmobiliario profesional certificado AMPI. Propiedades exclusivas en Valle de Bravo y Ciudad de México. Venta, renta e inversión inmobiliaria con asesoría personalizada.',
+  alternates: {
+    canonical: baseUrl,
+  },
+  openGraph: {
+    title: 'Oliver López Guijoza | Asesor Inmobiliario Profesional',
+    description: 'Propiedades exclusivas en Valle de Bravo y CDMX. Venta, renta e inversión inmobiliaria.',
+    url: baseUrl,
+    type: 'website',
+    images: [
+      {
+        url: `${baseUrl}/images/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: 'Oliver López Guijoza - Asesor Inmobiliario',
+      },
+    ],
+  },
+};
 
 async function getFeaturedProperties() {
+  // Obtener todas las propiedades destacadas
   const { data, error } = await supabase
     .from('properties')
     .select('*')
-    .eq('featured', true)
-    .limit(6);
+    .eq('featured', true);
 
   if (error) {
     console.error('Error fetching featured properties:', error);
     return [];
   }
 
-  return data || [];
+  // Si hay más de 6, seleccionar 6 aleatoriamente
+  const allProperties = data || [];
+  if (allProperties.length > 6) {
+    const shuffled = [...allProperties].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 6);
+  }
+
+  return allProperties;
 }
 
 export default async function Home() {
   const featuredProperties = await getFeaturedProperties();
+  
+  // Obtener imágenes aleatorias para cada propiedad destacada
+  const propertiesWithImages = await Promise.all(
+    featuredProperties.map(async (property) => {
+      const internalId = property.ID_interno || property.internal_id;
+      let imageUrl = '';
+      if (internalId && property.status) {
+        try {
+          imageUrl = await getRandomPropertyImage(internalId, property.status);
+        } catch (error) {
+          console.error('Error obteniendo imagen:', error);
+        }
+      }
+      return { ...property, imageUrl };
+    })
+  );
 
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
@@ -31,7 +79,7 @@ export default async function Home() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/30 via-transparent to-[#050505] z-10" />
           <div className="absolute inset-0 bg-black/40 z-10" /> {/* Overlay de oscurecimiento */}
           <img 
-            src="./casa-minimalista-moderna-con-piscina-y-sillas-de-sol.jpg" 
+            src="/casa-minimalista-moderna-con-piscina-y-sillas-de-sol.jpg" 
             alt="Luxury Real Estate Hero"
             className="w-full h-full object-cover scale-105 animate-slow-zoom" 
             style={{ animationDuration: '20s' }}
@@ -127,26 +175,9 @@ export default async function Home() {
             </p>
           </div>
 
-          {featuredProperties.length > 0 ? (
+          {propertiesWithImages.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {featuredProperties.map((property) => (
-                  <div key={property.id} className="group transition-all duration-300 hover:-translate-y-2">
-                    <PropertyCard
-                      id={property.id}
-                      title={property.title}
-                      price={property.price}
-                      location={property.location}
-                      bedrooms={property.bedrooms}
-                      bathrooms={property.bathrooms}
-                      area={property.area}
-                      imageUrl={property.main_image_id ? `https://drive.google.com/thumbnail?id=${property.main_image_id}&sz=w1000` : '/images/placeholder.jpg'}
-                      propertyType={property.property_type}
-                      status={property.status}
-                    />
-                  </div>
-                ))}
-              </div>
+              <FeaturedPropertiesCarousel properties={propertiesWithImages} />
 
               <div className="text-center mt-20">
                 <Link
