@@ -170,7 +170,6 @@ export default function LoginForm() {
       {process.env.NODE_ENV === 'development' && (
         <div className="mt-4 p-3 bg-gray-100 rounded text-xs">
           <p className="font-semibold mb-1">Debug Info:</p>
-          <p>signIn disponible: {signIn ? '✅' : '❌'}</p>
           <p>Revisa la consola para más detalles</p>
         </div>
       )}
