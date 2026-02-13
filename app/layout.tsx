@@ -5,6 +5,7 @@ import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import FloatingButtons from '@/components/common/FloatingButtons';
 import CookieBanner from '@/components/common/CookieBanner';
+import MobileWebAppMeta from '@/components/common/MobileWebAppMeta';
 import { ClientProviders } from './providers';
 import StructuredData from '@/components/seo/StructuredData';
 
@@ -106,6 +107,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="scroll-smooth">
       <body className={`${inter.className} antialiased`}>
+        <MobileWebAppMeta />
         <ClientProviders>
           <div className="flex flex-col min-h-screen">
             {/* Header */}
