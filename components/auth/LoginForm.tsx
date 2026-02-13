@@ -41,10 +41,6 @@ export default function LoginForm() {
         console.error('❌ Error de autenticación:', result.error);
         setError(result.error.message || 'Credenciales incorrectas. Por favor, intenta nuevamente.');
         setLoading(false);
-      } else if (result === false || result === null) {
-        console.error('❌ Autenticación falló (retorno false/null)');
-        setError('Credenciales incorrectas. Por favor, intenta nuevamente.');
-        setLoading(false);
       } else {
         console.log('✅ Login exitoso - Redirigiendo al dashboard...');
         console.log('🔄 Intentando redirigir a /admin/dashboard');
