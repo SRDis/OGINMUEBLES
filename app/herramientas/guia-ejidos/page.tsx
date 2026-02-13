@@ -61,36 +61,48 @@ const procesoDominioPleno = [
     titulo: 'Certificación PROCEDE / FANAR',
     desc: 'El ejido debe estar certificado por el programa PROCEDE (ahora FANAR — Fondo de Apoyo para Núcleos Agrarios sin Regularizar). Esto significa que las parcelas están medidas, delimitadas y cada ejidatario tiene su Certificado Parcelario emitido por el RAN. Si el ejido no está certificado, este es el primer paso obligatorio.',
     requisitos: ['Solicitud del Comisariado Ejidal al RAN', 'Asamblea de delimitación de tierras', 'Medición y levantamiento topográfico por el INEGI/RAN', 'Emisión de certificados parcelarios'],
+    tiempo: '6-18 meses',
+    costo: '$0 - $50,000 MXN (gratuito si se hace por FANAR, costos de topografía si se contrata privado)',
   },
   {
     paso: '02',
     titulo: 'Convocatoria a Asamblea Ejidal',
     desc: 'Se convoca a Asamblea Ejidal con las formalidades de ley (Art. 24-28 Ley Agraria): convocatoria con al menos 30 días de anticipación, publicación en lugares visibles del ejido, y con la asistencia de un representante de la Procuraduría Agraria y un fedatario público.',
     requisitos: ['Convocatoria con 30 días de anticipación mínimo', 'Publicación en lugares visibles del ejido', 'Presencia de representante de la Procuraduría Agraria', 'Presencia de fedatario público (notario o equivalente)'],
+    tiempo: '1-2 meses',
+    costo: '$5,000 - $15,000 MXN (honorarios de fedatario, publicaciones, gastos de asamblea)',
   },
   {
     paso: '03',
     titulo: 'Resolución de la Asamblea — Dominio Pleno',
     desc: 'La Asamblea Ejidal aprueba la adopción del dominio pleno de las parcelas. Se requiere el voto favorable de las dos terceras partes de los ejidatarios asistentes (mayoría calificada). La resolución debe constar en acta formal firmada por los asistentes y el fedatario público.',
     requisitos: ['Quórum: tres cuartas partes de los ejidatarios en primera convocatoria', 'Voto favorable de dos terceras partes de los asistentes', 'Acta formal ante fedatario público', 'El ejidatario individual puede decidir si adopta o no el dominio pleno'],
+    tiempo: '1-3 meses (depende de la disponibilidad de la Asamblea)',
+    costo: '$0 - $10,000 MXN (gastos de asamblea, actas, copias certificadas)',
   },
   {
     paso: '04',
     titulo: 'Cancelación del Certificado Parcelario',
     desc: 'Una vez aprobado el dominio pleno, el ejidatario solicita al RAN la cancelación de su Certificado Parcelario. El RAN expide la cancelación y notifica al Registro Público de la Propiedad correspondiente.',
     requisitos: ['Solicitud por escrito al RAN', 'Acta de Asamblea que autorizó el dominio pleno', 'Certificado Parcelario original', 'Identificación del ejidatario'],
+    tiempo: '2-6 meses (tiempos del RAN pueden variar)',
+    costo: '$2,000 - $5,000 MXN (derechos de cancelación, copias certificadas)',
   },
   {
     paso: '05',
     titulo: 'Inscripción en el Registro Público de la Propiedad',
     desc: 'La parcela se inscribe en el Registro Público de la Propiedad y de Comercio (RPP) como propiedad privada plena. El RAN expide el título de propiedad correspondiente. A partir de este momento, la parcela deja de ser ejidal y se convierte en propiedad privada, sujeta al derecho civil.',
     requisitos: ['Notificación del RAN al RPP', 'Pago de derechos de inscripción', 'Emisión de título de propiedad', 'La parcela queda sujeta a derecho civil ordinario'],
+    tiempo: '1-3 meses',
+    costo: '$10,000 - $30,000 MXN (derechos de inscripción, emisión de título, gastos notariales)',
   },
   {
     paso: '06',
     titulo: 'Escrituración ante Notario Público',
     desc: 'Con el título de propiedad y la inscripción en el RPP, el ex-ejidatario puede vender libremente la propiedad a cualquier persona. La compraventa se formaliza ante notario público como cualquier propiedad privada, con escritura pública, pago de impuestos y registro.',
     requisitos: ['Título de propiedad del RPP', 'Avalúo bancario o comercial', 'Pago de ISR, ISAI y derechos notariales', 'Escritura pública ante notario', 'Inscripción a nombre del comprador en el RPP'],
+    tiempo: '1-2 meses',
+    costo: '6-8% del valor de la propiedad (ISAI 4.5%, honorarios notariales 1-3%, derechos de registro 0.5-1%)',
   },
 ];
 
@@ -314,7 +326,7 @@ export default function GuiaEjidosPage() {
                   <p className="text-gray-500 font-light leading-relaxed group-hover:text-gray-300 transition-colors mb-4 text-sm">
                     {step.desc}
                   </p>
-                  <div className="bg-[#050505] border border-white/5 rounded-sm p-4">
+                  <div className="bg-[#050505] border border-white/5 rounded-sm p-4 mb-4">
                     <h5 className="text-[10px] uppercase tracking-[0.2em] text-[#22AADE] font-bold mb-3">Requisitos</h5>
                     <ul className="space-y-2">
                       {step.requisitos.map((req, rIdx) => (
@@ -326,6 +338,17 @@ export default function GuiaEjidosPage() {
                         </li>
                       ))}
                     </ul>
+                  </div>
+                  {/* Tiempo y costo */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="bg-[#22AADE]/5 border border-[#22AADE]/20 rounded-sm p-3">
+                      <span className="text-[9px] uppercase tracking-wider text-[#22AADE] font-bold block mb-1">⏱️ Tiempo Estimado</span>
+                      <span className="text-xs text-white font-bold">{step.tiempo}</span>
+                    </div>
+                    <div className="bg-amber-500/5 border border-amber-500/20 rounded-sm p-3">
+                      <span className="text-[9px] uppercase tracking-wider text-amber-400 font-bold block mb-1">💰 Costo Aproximado</span>
+                      <span className="text-xs text-white font-bold">{step.costo}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -419,6 +442,197 @@ export default function GuiaEjidosPage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CHECKLIST DE VERIFICACIÓN */}
+      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
+              Antes de Comprar
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-extralight text-white mb-6">
+              Checklist de <span className="font-bold italic">Verificación</span>
+            </h3>
+            <p className="text-gray-500 font-light">
+              Si estás considerando comprar un terreno que podría ser ejidal, verifica estos puntos críticos antes de cualquier operación.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                {
+                  item: 'Verificar en el RAN si el terreno es ejidal',
+                  desc: 'Consulta el Registro Agrario Nacional (RAN) con el número de expediente o ubicación. El RAN puede confirmar si el terreno tiene antecedentes ejidales.',
+                  critico: true,
+                },
+                {
+                  item: 'Confirmar si tiene dominio pleno o sigue siendo ejidal',
+                  desc: 'Solo los terrenos con dominio pleno pueden venderse libremente. Si aún es ejidal, NO puedes comprarlo legalmente.',
+                  critico: true,
+                },
+                {
+                  item: 'Revisar el Certificado Parcelario o Título de Propiedad',
+                  desc: 'Si tiene Certificado Parcelario, aún es ejidal. Si tiene Título de Propiedad del RPP, ya es propiedad privada.',
+                  critico: true,
+                },
+                {
+                  item: 'Verificar que no sea tierra de uso común',
+                  desc: 'Las tierras de uso común NO pueden privatizarse. Solo las parcelas individuales pueden adoptar dominio pleno.',
+                  critico: true,
+                },
+                {
+                  item: 'Consultar con un abogado agrario certificado',
+                  desc: 'NUNCA compres tierra ejidal sin asesoría legal especializada. Un abogado agrario puede verificar el estatus legal real.',
+                  critico: true,
+                },
+                {
+                  item: 'Revisar el historial en el Registro Público de la Propiedad',
+                  desc: 'Consulta el RPP del estado correspondiente. Si no aparece inscrito, es una señal de alerta importante.',
+                  critico: true,
+                },
+                {
+                  item: 'Verificar que el vendedor sea el propietario real',
+                  desc: 'Confirma la identidad del vendedor y que tenga facultades legales para vender. Pide identificación oficial y documentos que acrediten propiedad.',
+                  critico: false,
+                },
+                {
+                  item: 'Revisar si hay litigios o controversias agrarias',
+                  desc: 'Consulta en el Tribunal Unitario Agrario correspondiente si hay juicios o controversias pendientes sobre el terreno.',
+                  critico: false,
+                },
+                {
+                  item: 'Verificar colindancias y medidas del terreno',
+                  desc: 'Confirma que las medidas y colindancias coincidan con el documento. Considera hacer un levantamiento topográfico independiente.',
+                  critico: false,
+                },
+                {
+                  item: 'Revisar uso de suelo y restricciones municipales',
+                  desc: 'Verifica en el municipio el uso de suelo permitido y si hay restricciones de construcción o desarrollo.',
+                  critico: false,
+                },
+              ].map((check, idx) => (
+                <div
+                  key={idx}
+                  className={`bg-[#050505] border rounded-sm p-5 transition-colors ${
+                    check.critico
+                      ? 'border-red-500/30 hover:border-red-500/60'
+                      : 'border-white/5 hover:border-white/15'
+                  }`}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                      check.critico ? 'bg-red-500/10' : 'bg-[#22AADE]/10'
+                    }`}>
+                      <span className={`text-xs font-bold ${
+                        check.critico ? 'text-red-400' : 'text-[#22AADE]'
+                      }`}>
+                        {idx + 1}
+                      </span>
+                    </div>
+                    <div className="flex-grow">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="text-white font-bold text-sm">{check.item}</h4>
+                        {check.critico && (
+                          <span className="text-[8px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">
+                            Crítico
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-gray-500 text-xs font-light leading-relaxed">{check.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="max-w-4xl mx-auto mt-12">
+            <div className="bg-red-500/10 border-2 border-red-500/30 rounded-sm p-8">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span className="text-red-400 text-xl">⚠️</span>
+                </div>
+                <div>
+                  <h3 className="text-white font-bold mb-3">Advertencia Importante</h3>
+                  <p className="text-gray-400 font-light leading-relaxed mb-3">
+                    Si el terreno que quieres comprar <strong className="text-white">NO cumple con TODOS los puntos críticos</strong> de este checklist,
+                    especialmente si aún es ejidal o no tiene dominio pleno, <strong className="text-red-400">NO REALICES LA OPERACIÓN</strong>.
+                  </p>
+                  <p className="text-gray-400 font-light leading-relaxed">
+                    Cualquier compraventa de tierra ejidal sin dominio pleno es <strong className="text-red-400">NULA de pleno derecho</strong> y puede resultar en pérdida total de tu inversión.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* RESUMEN DE COSTOS Y TIEMPOS */}
+      <section className="py-24 bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
+              Resumen
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-extralight text-white mb-6">
+              Costos y Tiempos <span className="font-bold italic">Totales</span>
+            </h3>
+            <p className="text-gray-500 font-light">
+              Estimación general del proceso completo de dominio pleno (sin incluir escrituración de venta).
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+              <div className="bg-[#0a0a0a] border border-[#22AADE]/20 rounded-sm p-8">
+                <div className="w-14 h-14 bg-[#22AADE]/10 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-7 h-7 text-[#22AADE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-white font-bold text-lg mb-4">Tiempo Total Estimado</h4>
+                <p className="text-3xl font-black text-[#22AADE] mb-2">12-36 meses</p>
+                <p className="text-gray-500 text-sm font-light">
+                  El tiempo varía según: si el ejido ya está certificado, la disponibilidad de la Asamblea Ejidal, y los tiempos de respuesta del RAN y RPP.
+                </p>
+              </div>
+
+              <div className="bg-[#0a0a0a] border border-amber-500/20 rounded-sm p-8">
+                <div className="w-14 h-14 bg-amber-500/10 rounded-full flex items-center justify-center mb-6">
+                  <svg className="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h4 className="text-white font-bold text-lg mb-4">Costo Total Aproximado</h4>
+                <p className="text-3xl font-black text-amber-400 mb-2">$30,000 - $120,000 MXN</p>
+                <p className="text-gray-500 text-sm font-light">
+                  Incluye: trámites del RAN, honorarios de fedatarios, derechos de inscripción, y gastos de asamblea. No incluye escrituración de venta posterior.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-8">
+              <h4 className="text-white font-bold text-lg mb-6">Desglose de Costos por Etapa</h4>
+              <div className="space-y-4">
+                {procesoDominioPleno.map((step, idx) => (
+                  <div key={idx} className="flex items-center justify-between p-4 bg-[#050505] rounded-lg border border-white/5">
+                    <div>
+                      <span className="text-[#22AADE] font-bold text-xs uppercase tracking-wider">{step.paso}</span>
+                      <p className="text-white font-medium text-sm mt-1">{step.titulo}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-gray-400 text-xs mb-1">{step.tiempo}</p>
+                      <p className="text-amber-400 font-bold text-sm">{step.costo}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
+import ChecklistDownloader from './ChecklistDownloader';
+import DocumentCard from './DocumentCard';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.oginmuebles.com';
 
@@ -27,14 +29,44 @@ const operaciones = [
           { 
             doc: 'Identificación oficial vigente (INE/IFE o pasaporte)', 
             obligatorio: true, 
-            nota: 'Debe ser original y vigente. Fundamento: Art. 27 Constitucional, Art. 100 de la Ley del Notariado del Estado de México. El notario debe verificar la identidad de los comparecientes.',
-            fundamento: 'Art. 27 Constitucional, Art. 100 Ley del Notariado EdoMex'
+            nota: 'Debe ser original y vigente. El notario debe verificar la identidad de los comparecientes. Si es extranjero, debe presentar pasaporte y forma migratoria vigente (FM2/FM3).',
+            fundamento: 'Art. 27 Constitucional, Art. 100 Ley del Notariado EdoMex',
+            tramite: {
+              pasos: [
+                'Verificar que tu identificación esté vigente y en buen estado',
+                'Si tu INE está vencida o dañada, tramita una nueva en el módulo del INE más cercano',
+                'Para extranjeros: verificar que la forma migratoria (FM2/FM3) esté vigente',
+                'Presentar original y copia al notario al momento de la firma'
+              ],
+              donde: [
+                'Módulo del INE para renovación (si aplica)',
+                'Oficina de Migración para extranjeros (si aplica)',
+                'Notaría pública (presentación)'
+              ],
+              tiempo: '1-3 semanas (si requiere renovación)',
+              costo: '$0 - $500 MXN (renovación INE)'
+            }
           },
           { 
             doc: 'CURP actualizada', 
             obligatorio: true, 
             nota: 'Clave Única de Registro de Población. Requerida por el SAT para trámites fiscales y por el notario para la escritura pública. Debe coincidir con la identificación oficial.',
-            fundamento: 'Art. 27 Código Fiscal de la Federación'
+            fundamento: 'Art. 27 Código Fiscal de la Federación',
+            tramite: {
+              pasos: [
+                'Verificar tu CURP en el portal del RENAPO (www.gob.mx/curp)',
+                'Si hay errores, solicita corrección en el módulo del RENAPO',
+                'Descarga e imprime tu CURP actualizada',
+                'Presenta copia al notario'
+              ],
+              donde: [
+                'Portal web: www.gob.mx/curp',
+                'Módulo del RENAPO (correcciones)',
+                'Notaría pública (presentación)'
+              ],
+              tiempo: 'Inmediato (descarga) o 1-2 semanas (corrección)',
+              costo: 'Gratuito'
+            }
           },
           { 
             doc: 'Acta de nacimiento (copia certificada reciente)', 
@@ -69,7 +101,23 @@ const operaciones = [
             doc: 'Constancia de Situación Fiscal (CSF)', 
             obligatorio: true, 
             nota: 'Emitida por el SAT con código QR, vigencia reciente (máx. 1 mes). Valida el domicilio fiscal y régimen tributario del comprador.',
-            fundamento: 'Art. 27 Código Fiscal de la Federación'
+            fundamento: 'Art. 27 Código Fiscal de la Federación',
+            tramite: {
+              pasos: [
+                'Ingresa al portal del SAT (www.sat.gob.mx) con tu RFC y contraseña',
+                'Ve a "Constancia de Situación Fiscal" en el menú',
+                'Descarga la constancia con código QR (formato PDF)',
+                'Verifica que la vigencia no sea mayor a 1 mes',
+                'Imprime y presenta al notario'
+              ],
+              donde: [
+                'Portal web del SAT: www.sat.gob.mx',
+                'Oficinas del SAT (si no tienes acceso digital)',
+                'Notaría pública (presentación)'
+              ],
+              tiempo: '5-10 minutos (digital) o 1-2 horas (presencial)',
+              costo: 'Gratuito'
+            }
           },
           { 
             doc: 'Comprobante de ingresos o estados de cuenta (últimos 3-6 meses)', 
@@ -147,14 +195,45 @@ const operaciones = [
           { 
             doc: 'Certificado de Libertad de Gravamen vigente (máx. 30 días)', 
             obligatorio: true, 
-            nota: 'Emitido por el Registro Público de la Propiedad, confirma que el inmueble está libre de hipotecas, embargos, gravámenes o litigios. Vigencia de 30 días naturales. Costo aproximado: $500-$1,500 MXN según el municipio.',
-            fundamento: 'Art. 3005 Código Civil Federal, Reglamento del RPP del Estado de México'
+            nota: 'Emitido por el Registro Público de la Propiedad, confirma que el inmueble está libre de hipotecas, embargos, gravámenes o litigios. Vigencia de 30 días naturales.',
+            fundamento: 'Art. 3005 Código Civil Federal, Reglamento del RPP del Estado de México',
+            tramite: {
+              pasos: [
+                'Acudir al Registro Público de la Propiedad del municipio donde está ubicado el inmueble',
+                'Presentar solicitud con: número de folio real, ubicación del inmueble, identificación del solicitante',
+                'Pagar derechos de expedición ($500-$1,500 MXN según municipio)',
+                'Recibir el certificado (generalmente el mismo día o en 24-48 horas)',
+                'Verificar que la vigencia no sea mayor a 30 días al momento de la escrituración'
+              ],
+              donde: [
+                'Registro Público de la Propiedad del municipio correspondiente',
+                'Oficinas de Catastro municipal (algunos municipios)'
+              ],
+              tiempo: '1-3 días hábiles',
+              costo: '$500 - $1,500 MXN'
+            }
           },
           { 
             doc: 'Boletas de impuesto predial al corriente (últimos 5-10 años)', 
             obligatorio: true, 
-            nota: 'Impuesto predial municipal pagado y actualizado. Art. 115 Constitucional otorga a los municipios la facultad de cobrar el predial. Algunos notarios solicitan constancia de no adeudo de hasta 10 años. En caso de adeudo, debe liquidarse antes de la escrituración.',
-            fundamento: 'Art. 115, fracción IV Constitución Política de los Estados Unidos Mexicanos'
+            nota: 'Impuesto predial municipal pagado y actualizado. Algunos notarios solicitan constancia de no adeudo de hasta 10 años. En caso de adeudo, debe liquidarse antes de la escrituración.',
+            fundamento: 'Art. 115, fracción IV Constitución Política de los Estados Unidos Mexicanos',
+            tramite: {
+              pasos: [
+                'Acudir a la Tesorería Municipal o módulo de recaudación',
+                'Solicitar copias certificadas de las boletas de predial de los últimos 5-10 años',
+                'Si hay adeudos, liquidarlos con recargos y multas',
+                'Obtener constancia de no adeudo (si aplica)',
+                'Presentar boletas y constancia al notario'
+              ],
+              donde: [
+                'Tesorería Municipal',
+                'Módulos de recaudación municipal',
+                'Portal web del municipio (algunos permiten descarga)'
+              ],
+              tiempo: '1-3 días hábiles',
+              costo: '$50 - $200 MXN (copias certificadas) + adeudos pendientes'
+            }
           },
           { 
             doc: 'Boletas de agua al corriente o constancia de no adeudo', 
@@ -570,39 +649,7 @@ export default function GuiaDocumentacionPage() {
 
                   <div className="space-y-3">
                     {cat.items.map((item, itemIdx) => (
-                      <div
-                        key={itemIdx}
-                        className="bg-[#050505]/50 border border-white/5 rounded-sm p-5 hover:border-white/10 transition-colors group"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className={`w-6 h-6 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                            item.obligatorio ? 'bg-red-500/10' : 'bg-white/5'
-                          }`}>
-                            {item.obligatorio ? (
-                              <span className="text-red-400 text-[10px] font-black">!</span>
-                            ) : (
-                              <span className="text-gray-600 text-[10px]">○</span>
-                            )}
-                          </div>
-                          <div className="flex-grow">
-                            <div className="flex items-start justify-between gap-4">
-                              <h4 className="text-white font-medium text-sm">{item.doc}</h4>
-                              <span className={`text-[9px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full flex-shrink-0 ${
-                                item.obligatorio
-                                  ? 'bg-red-500/10 text-red-400 border border-red-500/20'
-                                  : 'bg-white/5 text-gray-600 border border-white/10'
-                              }`}>
-                                {item.obligatorio ? 'Obligatorio' : 'Opcional'}
-                              </span>
-                            </div>
-                            {item.nota && (
-                              <p className="text-gray-500 text-xs font-light mt-2 leading-relaxed group-hover:text-gray-400 transition-colors">
-                                {item.nota}
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </div>
+                      <DocumentCard key={itemIdx} item={item} color={op.color} />
                     ))}
                   </div>
                 </div>
@@ -661,6 +708,180 @@ export default function GuiaDocumentacionPage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TIMELINE DE TRÁMITES */}
+      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
+              Timeline
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-extralight text-white mb-6">
+              Proceso de <span className="font-bold italic">Compraventa</span>
+            </h3>
+            <p className="text-gray-500 font-light">
+              Tiempos estimados y orden recomendado de trámites para una operación exitosa.
+            </p>
+          </div>
+
+          <div className="max-w-4xl mx-auto">
+            {[
+              { etapa: '01', titulo: 'Preparación y Revisión', tiempo: '1-2 semanas', desc: 'Reunir documentos personales, verificar situación fiscal, obtener constancias de no adeudo, revisar escritura del vendedor.' },
+              { etapa: '02', titulo: 'Negociación y Contrato', tiempo: '1-2 semanas', desc: 'Firmar promesa de compraventa, definir condiciones, establecer plazos, acordar precio y forma de pago.' },
+              { etapa: '03', titulo: 'Avalúo y Verificaciones', tiempo: '2-3 semanas', desc: 'Avalúo bancario o comercial, verificación de gravámenes, revisión de predial y servicios, inspección física del inmueble.' },
+              { etapa: '04', titulo: 'Trámites Notariales', tiempo: '2-4 semanas', desc: 'Elaboración de escritura pública, cálculo de impuestos, revisión de documentos, programación de firma.' },
+              { etapa: '05', titulo: 'Firma y Escrituración', tiempo: '1 día', desc: 'Firma ante notario, pago de impuestos y honorarios, entrega de llaves, recepción de copias certificadas.' },
+              { etapa: '06', titulo: 'Registro e Inscripción', tiempo: '2-4 semanas', desc: 'Inscripción en el Registro Público de la Propiedad, actualización de predial, cambio de servicios a nombre del comprador.' },
+            ].map((step, idx) => (
+              <div key={idx} className="flex gap-6 md:gap-10 group mb-8 last:mb-0">
+                <div className="flex flex-col items-center">
+                  <div className="w-14 h-14 bg-[#050505] border border-white/10 group-hover:border-[#22AADE] rounded-full flex items-center justify-center transition-all duration-500 flex-shrink-0">
+                    <span className="text-[#22AADE] font-black text-sm">{step.etapa}</span>
+                  </div>
+                  {idx < 5 && (
+                    <div className="w-[1px] h-full min-h-[60px] bg-white/10 group-hover:bg-[#22AADE]/30 transition-colors" />
+                  )}
+                </div>
+                <div className="pb-4">
+                  <div className="flex items-center gap-4 mb-2">
+                    <h4 className="text-xl font-bold text-white group-hover:text-[#22AADE] transition-colors uppercase tracking-wider">
+                      {step.titulo}
+                    </h4>
+                    <span className="text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-full bg-[#22AADE]/10 text-[#22AADE] border border-[#22AADE]/20">
+                      {step.tiempo}
+                    </span>
+                  </div>
+                  <p className="text-gray-500 font-light leading-relaxed group-hover:text-gray-300 transition-colors text-sm">
+                    {step.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DOCUMENTOS FRECUENTEMENTE OLVIDADOS */}
+      <section className="py-24 bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
+              Errores Comunes
+            </h2>
+            <h3 className="text-3xl md:text-5xl font-extralight text-white mb-6">
+              Documentos Frecuentemente <span className="font-bold italic">Olvidados</span>
+            </h3>
+            <p className="text-gray-500 font-light">
+              Estos documentos suelen causar retrasos porque no se consideran hasta el último momento.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+            {[
+              {
+                doc: 'Constancia de Situación Fiscal (CSF) con código QR',
+                problema: 'Muchos la solicitan sin código QR o con más de 1 mes de antigüedad',
+                solucion: 'Descárgala del portal del SAT con código QR. Vigencia máxima: 1 mes.',
+                critico: true,
+              },
+              {
+                doc: 'Acta de matrimonio o constancia de soltería reciente',
+                problema: 'Se presenta con más de 3 meses de antigüedad o no se incluye al cónyuge',
+                solucion: 'Obtén una copia certificada reciente (máx. 3 meses). Si estás casado bajo sociedad conyugal, tu cónyuge debe firmar.',
+                critico: true,
+              },
+              {
+                doc: 'Comprobante de origen lícito de recursos',
+                problema: 'No se prepara cuando la operación supera $805,000 MXN',
+                solucion: 'Declaración bajo protesta de decir verdad. Incluye estados de cuenta, comprobantes de ingresos o constancia de venta de otro inmueble.',
+                critico: true,
+              },
+              {
+                doc: 'Boletas de predial de los últimos 5-10 años',
+                problema: 'Solo se presenta el año actual, pero algunos notarios piden hasta 10 años',
+                solucion: 'Solicita copias certificadas en el municipio. Si hay adeudos, liquídalos antes de la escrituración.',
+                critico: false,
+              },
+              {
+                doc: 'Constancia de no adeudo de servicios (agua, luz)',
+                problema: 'Se olvida verificar que no haya adeudos pendientes',
+                solucion: 'Obtén constancias de no adeudo del organismo operador de agua (CAEM, ODAPAS) y de CFE.',
+                critico: false,
+              },
+              {
+                doc: 'Poder notarial especial para actos de dominio',
+                problema: 'Si no puedes firmar personalmente, el poder debe estar inscrito y con facultades expresas',
+                solucion: 'El poder debe estar inscrito en el RPP y especificar claramente la facultad de vender. Vigencia: verifica que esté vigente.',
+                critico: false,
+              },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className={`bg-[#0a0a0a] border rounded-sm p-6 transition-colors ${
+                  item.critico
+                    ? 'border-red-500/30 hover:border-red-500/60'
+                    : 'border-white/5 hover:border-white/15'
+                }`}
+              >
+                <div className="flex items-start gap-3 mb-3">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                    item.critico ? 'bg-red-500/10' : 'bg-[#22AADE]/10'
+                  }`}>
+                    <span className={`text-xs font-bold ${item.critico ? 'text-red-400' : 'text-[#22AADE]'}`}>
+                      {idx + 1}
+                    </span>
+                  </div>
+                  <div className="flex-grow">
+                    <h4 className="text-white font-bold mb-2">{item.doc}</h4>
+                    {item.critico && (
+                      <span className="text-[8px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 mb-2 inline-block">
+                        Crítico
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="ml-11 space-y-2">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-amber-400 font-bold mb-1">⚠️ Problema común:</p>
+                    <p className="text-gray-400 text-xs font-light">{item.problema}</p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-green-400 font-bold mb-1">✅ Solución:</p>
+                    <p className="text-gray-300 text-xs font-light">{item.solucion}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CHECKLIST DESCARGABLE */}
+      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+          <div className="bg-[#050505] border-2 border-[#22AADE]/30 rounded-sm p-8 md:p-10">
+            <div className="text-center mb-8">
+              <div className="w-16 h-16 bg-[#22AADE]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#22AADE]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-extralight text-white mb-3">
+                Checklist <span className="font-bold italic">Descargable</span>
+              </h3>
+              <p className="text-gray-400 font-light">
+                Descarga una lista verificable de todos los documentos necesarios según tu tipo de operación.
+              </p>
+            </div>
+
+            <ChecklistDownloader operaciones={operaciones} />
+
+            <p className="text-[10px] text-gray-600 text-center">
+              Puedes marcar los documentos conforme los vayas obteniendo. Guarda este archivo para referencia durante tu proceso.
+            </p>
           </div>
         </div>
       </section>

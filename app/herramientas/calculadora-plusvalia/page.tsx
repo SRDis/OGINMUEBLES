@@ -17,11 +17,11 @@ type ZonaData = {
 
 const zonas: Record<string, ZonaData> = {
   'valle-bravo-premium': {
-    name: 'Valle de Bravo — Zona Premium (La Peña, Avándaro Centro)',
+    name: 'Valle de Bravo — Zona Premium (La Peña, Avándaro Centro, Vista al Lago)',
     precioM2Min: 18000,
     precioM2Max: 45000,
     plusvaliaAnual: 8.5,
-    desc: 'Zonas más exclusivas con vista al lago, cercanía a club de golf y servicios premium.',
+    desc: 'Zonas más exclusivas con vista al lago, cercanía a club de golf, marinas y servicios premium. Alta demanda de compradores de alto poder adquisitivo.',
   },
   'valle-bravo-residencial': {
     name: 'Valle de Bravo — Residencial (Avándaro, El Santuario)',
@@ -107,6 +107,48 @@ const zonas: Record<string, ZonaData> = {
     plusvaliaAnual: 6.5,
     desc: 'Pueblo mágico con desarrollo residencial campestre de alta plusvalía.',
   },
+  'zona-metropolitana-toluca': {
+    name: 'Zona Metropolitana Toluca (San Mateo, Metepec, Zinacantepec)',
+    precioM2Min: 10000,
+    precioM2Max: 28000,
+    plusvaliaAnual: 6.8,
+    desc: 'Corredor de alta demanda residencial y comercial, excelente conectividad y servicios.',
+  },
+  'santa-fe-cuajimalpa': {
+    name: 'Santa Fe / Cuajimalpa (límite CDMX-EdoMex)',
+    precioM2Min: 30000,
+    precioM2Max: 70000,
+    plusvaliaAnual: 5.5,
+    desc: 'Zona de lujo con desarrollo vertical, corporativos y alta plusvalía consolidada.',
+  },
+  'tlalnepantla-atizapan': {
+    name: 'Tlalnepantla / Atizapán de Zaragoza',
+    precioM2Min: 8000,
+    precioM2Max: 22000,
+    plusvaliaAnual: 5.5,
+    desc: 'Zona residencial consolidada con buena infraestructura y acceso a CDMX.',
+  },
+  'coacalco-tultitlan': {
+    name: 'Coacalco / Tultitlán / Cuautitlán',
+    precioM2Min: 4500,
+    precioM2Max: 13000,
+    plusvaliaAnual: 5.0,
+    desc: 'Zona en crecimiento con vivienda media y acceso a corredores industriales.',
+  },
+  'texcoco-chimalhuacan': {
+    name: 'Texcoco / Chimalhuacán / Nezahualcóyotl',
+    precioM2Min: 5000,
+    precioM2Max: 15000,
+    plusvaliaAnual: 4.8,
+    desc: 'Zona oriente con alta densidad, vivienda de interés social a medio, en proceso de consolidación.',
+  },
+  'zona-sur-valle-bravo': {
+    name: 'Zona Sur Valle de Bravo (Comunidades aledañas, terrenos campestres)',
+    precioM2Min: 2500,
+    precioM2Max: 8000,
+    plusvaliaAnual: 6.0,
+    desc: 'Terrenos en comunidades aledañas a Valle de Bravo, ideal para desarrollo campestre y segunda residencia.',
+  },
 };
 
 const tiposPropiedad = [
@@ -126,14 +168,18 @@ const estadoFisico = [
 ];
 
 const amenidadesDisponibles = [
-  { id: 'alberca', label: 'Alberca', factor: 1.08 },
-  { id: 'jardin', label: 'Jardín amplio', factor: 1.05 },
-  { id: 'seguridad', label: 'Seguridad / Caseta', factor: 1.06 },
-  { id: 'estacionamiento', label: 'Estacionamiento techado', factor: 1.04 },
-  { id: 'vista', label: 'Vista panorámica / al lago', factor: 1.12 },
-  { id: 'acabados', label: 'Acabados de lujo', factor: 1.10 },
-  { id: 'areas_comunes', label: 'Áreas comunes / Club house', factor: 1.05 },
-  { id: 'terraza', label: 'Terraza / Roof garden', factor: 1.06 },
+  { id: 'vista', label: 'Vista panorámica / al lago / montaña', factor: 1.15 },
+  { id: 'alberca', label: 'Alberca privada o comunitaria', factor: 1.10 },
+  { id: 'acabados', label: 'Acabados de lujo (mármol, granito, porcelanato)', factor: 1.12 },
+  { id: 'seguridad', label: 'Seguridad 24/7 / Caseta de vigilancia', factor: 1.08 },
+  { id: 'jardin', label: 'Jardín amplio y bien diseñado', factor: 1.06 },
+  { id: 'estacionamiento', label: 'Estacionamiento techado (2+ espacios)', factor: 1.05 },
+  { id: 'areas_comunes', label: 'Áreas comunes / Club house / Gimnasio', factor: 1.07 },
+  { id: 'terraza', label: 'Terraza / Roof garden / Área de asador', factor: 1.06 },
+  { id: 'paneles_solares', label: 'Paneles solares / Energía alternativa', factor: 1.08 },
+  { id: 'domotica', label: 'Domótica / Casa inteligente', factor: 1.05 },
+  { id: 'cocina_equipada', label: 'Cocina completamente equipada (alta gama)', factor: 1.04 },
+  { id: 'bodega', label: 'Bodega / Cuarto de servicio amplio', factor: 1.03 },
 ];
 
 /* ─────────────────────────────────────────────────────────────
@@ -148,6 +194,8 @@ export default function CalculadoraPlusvaliaPage() {
   const [antiguedad, setAntiguedad] = useState('');
   const [amenidades, setAmenidades] = useState<string[]>([]);
   const [proyeccion, setProyeccion] = useState(5);
+  const [ubicacionEspecifica, setUbicacionEspecifica] = useState('');
+  const [cercaniaServicios, setCercaniaServicios] = useState('buena');
   const [resultado, setResultado] = useState<{
     valorActualMin: number;
     valorActualMax: number;
@@ -156,6 +204,7 @@ export default function CalculadoraPlusvaliaPage() {
     valorFuturo: number;
     plusvaliaAnual: number;
     precioM2: number;
+    factoresAplicados: string[];
   } | null>(null);
 
   const toggleAmenidad = (id: string) => {
@@ -189,13 +238,34 @@ export default function CalculadoraPlusvaliaPage() {
     }
 
     // Factor de amenidades
+    const factoresAplicados: string[] = [];
     amenidades.forEach((amenId) => {
       const amen = amenidadesDisponibles.find((a) => a.id === amenId);
-      if (amen) precioAjustado *= amen.factor;
+      if (amen) {
+        precioAjustado *= amen.factor;
+        factoresAplicados.push(amen.label);
+      }
     });
 
-    const valorActualMin = zonaData.precioM2Min * m2 * tipoData.factor * estadoData.factor;
-    const valorActualMax = zonaData.precioM2Max * m2 * tipoData.factor * estadoData.factor;
+    // Factor de cercanía a servicios
+    const factorServicios = cercaniaServicios === 'excelente' ? 1.08 : 
+                           cercaniaServicios === 'buena' ? 1.04 : 
+                           cercaniaServicios === 'regular' ? 0.98 : 0.95;
+    precioAjustado *= factorServicios;
+    if (cercaniaServicios === 'excelente' || cercaniaServicios === 'buena') {
+      factoresAplicados.push(`Cercanía a servicios: ${cercaniaServicios}`);
+    }
+
+    // Factor de ubicación específica (si es premium dentro de la zona)
+    if (ubicacionEspecifica === 'premium') {
+      precioAjustado *= 1.12;
+      factoresAplicados.push('Ubicación premium dentro de la zona');
+    } else if (ubicacionEspecifica === 'regular') {
+      precioAjustado *= 0.95;
+    }
+
+    const valorActualMin = zonaData.precioM2Min * m2 * tipoData.factor * estadoData.factor * factorServicios;
+    const valorActualMax = zonaData.precioM2Max * m2 * tipoData.factor * estadoData.factor * factorServicios;
     const valorEstimado = precioAjustado * m2;
 
     // Plusvalía proyectada
@@ -211,6 +281,7 @@ export default function CalculadoraPlusvaliaPage() {
       valorFuturo,
       plusvaliaAnual,
       precioM2: precioAjustado,
+      factoresAplicados,
     });
   };
 
@@ -363,16 +434,23 @@ export default function CalculadoraPlusvaliaPage() {
                   {amenidadesDisponibles.map((amen) => (
                     <label
                       key={amen.id}
+                      onClick={() => toggleAmenidad(amen.id)}
                       className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-300 ${
                         amenidades.includes(amen.id)
                           ? 'bg-[#22AADE]/5 border border-[#22AADE]/20'
                           : 'bg-white/[0.02] border border-transparent hover:bg-white/5'
                       }`}
                     >
-                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                      <input
+                        type="checkbox"
+                        checked={amenidades.includes(amen.id)}
+                        onChange={() => toggleAmenidad(amen.id)}
+                        className="sr-only"
+                      />
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0 ${
                         amenidades.includes(amen.id)
                           ? 'bg-[#22AADE] border-[#22AADE]'
-                          : 'border-gray-600'
+                          : 'border-gray-600 hover:border-gray-400'
                       }`}>
                         {amenidades.includes(amen.id) && (
                           <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -380,32 +458,118 @@ export default function CalculadoraPlusvaliaPage() {
                           </svg>
                         )}
                       </div>
-                      <span className="text-sm text-gray-400 font-light">{amen.label}</span>
-                      <span className="text-[9px] text-[#22AADE] ml-auto">+{Math.round((amen.factor - 1) * 100)}%</span>
+                      <span className="text-sm text-gray-400 font-light flex-grow">{amen.label}</span>
+                      <span className="text-[9px] text-[#22AADE] ml-auto font-bold">+{Math.round((amen.factor - 1) * 100)}%</span>
                     </label>
                   ))}
                 </div>
               </div>
 
+              {/* Ubicación y servicios */}
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">4. Ubicación Específica</h3>
+                <p className="text-gray-500 text-xs mb-6">Detalles adicionales sobre la ubicación dentro de la zona</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Tipo de ubicación
+                    </label>
+                    <select
+                      value={ubicacionEspecifica}
+                      onChange={(e) => setUbicacionEspecifica(e.target.value)}
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#22AADE] transition-colors appearance-none"
+                    >
+                      <option value="">Seleccionar...</option>
+                      <option value="premium">Premium (mejor ubicación de la zona)</option>
+                      <option value="buena">Buena (ubicación estándar)</option>
+                      <option value="regular">Regular (ubicación menos privilegiada)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Cercanía a servicios
+                    </label>
+                    <select
+                      value={cercaniaServicios}
+                      onChange={(e) => setCercaniaServicios(e.target.value)}
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#22AADE] transition-colors appearance-none"
+                    >
+                      <option value="excelente">Excelente (a menos de 500m de todo)</option>
+                      <option value="buena">Buena (a menos de 1km de servicios principales)</option>
+                      <option value="regular">Regular (a 1-3km de servicios)</option>
+                      <option value="lejana">Lejana (más de 3km de servicios)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               {/* Proyección */}
               <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
-                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">4. Proyección</h3>
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">5. Proyección</h3>
                 <p className="text-gray-500 text-xs mb-6">¿A cuántos años quieres proyectar la plusvalía?</p>
 
-                <div className="flex items-center gap-6">
-                  {[1, 3, 5, 10, 15, 20].map((y) => (
-                    <button
-                      key={y}
-                      onClick={() => setProyeccion(y)}
-                      className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
-                        proyeccion === y
-                          ? 'bg-[#22AADE] text-black'
-                          : 'bg-white/5 text-gray-400 hover:text-white border border-white/10'
-                      }`}
-                    >
-                      {y} {y === 1 ? 'año' : 'años'}
-                    </button>
-                  ))}
+                <div className="space-y-4">
+                  {/* Slider */}
+                  <div className="relative">
+                    <input
+                      type="range"
+                      min="1"
+                      max="20"
+                      value={proyeccion}
+                      onChange={(e) => setProyeccion(parseInt(e.target.value))}
+                      className="w-full h-2 bg-[#1a1a1a] rounded-lg appearance-none cursor-pointer accent-[#22AADE] slider"
+                      style={{
+                        background: `linear-gradient(to right, #22AADE 0%, #22AADE ${((proyeccion - 1) / 19) * 100}%, #1a1a1a ${((proyeccion - 1) / 19) * 100}%, #1a1a1a 100%)`
+                      }}
+                    />
+                    <style jsx>{`
+                      .slider::-webkit-slider-thumb {
+                        appearance: none;
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        background: #22AADE;
+                        cursor: pointer;
+                        border: 2px solid #050505;
+                        box-shadow: 0 0 10px rgba(34, 170, 222, 0.5);
+                      }
+                      .slider::-moz-range-thumb {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 50%;
+                        background: #22AADE;
+                        cursor: pointer;
+                        border: 2px solid #050505;
+                        box-shadow: 0 0 10px rgba(34, 170, 222, 0.5);
+                      }
+                    `}</style>
+                  </div>
+                  
+                  {/* Marcadores y valor */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-gray-500">1 año</span>
+                    <div className="flex-1 mx-4 relative">
+                      <div className="absolute inset-0 flex items-center justify-between">
+                        {[1, 5, 10, 15, 20].map((mark) => (
+                          <div key={mark} className="flex flex-col items-center">
+                            <div className={`w-1 h-4 ${proyeccion === mark ? 'bg-[#22AADE]' : 'bg-white/10'}`} />
+                            <span className={`text-[9px] mt-1 ${proyeccion === mark ? 'text-[#22AADE] font-bold' : 'text-gray-600'}`}>
+                              {mark}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <span className="text-xs text-gray-500">20 años</span>
+                  </div>
+                  
+                  {/* Valor seleccionado destacado */}
+                  <div className="text-center pt-4 border-t border-white/5">
+                    <span className="text-2xl font-black text-[#22AADE]">{proyeccion}</span>
+                    <span className="text-sm text-gray-400 ml-2">{proyeccion === 1 ? 'año' : 'años'}</span>
+                  </div>
                 </div>
               </div>
 
@@ -465,28 +629,77 @@ export default function CalculadoraPlusvaliaPage() {
                       </div>
                     </div>
 
-                    {/* Gráfica simplificada */}
+                    {/* Factores aplicados */}
+                    {resultado && resultado.factoresAplicados && resultado.factoresAplicados.length > 0 && (
+                      <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                        <span className="text-[10px] uppercase tracking-[0.3em] text-[#22AADE] font-bold block mb-4">Factores de Valor Agregado</span>
+                        <div className="space-y-2">
+                          {resultado.factoresAplicados.map((factor, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-xs text-gray-400">
+                              <svg className="w-3 h-3 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                              </svg>
+                              {factor}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Gráfica mejorada */}
                     <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
-                      <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-bold block mb-4">Crecimiento Proyectado</span>
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-bold block mb-4">Proyección de Crecimiento</span>
                       <div className="space-y-3">
-                        {Array.from({ length: Math.min(proyeccion, 10) }, (_, i) => {
+                        {/* Valor actual */}
+                        <div className="flex items-center gap-3 pb-2 border-b border-white/5">
+                          <span className="text-[10px] text-gray-500 w-16 text-right">Hoy</span>
+                          <div className="flex-grow h-4 bg-[#1a1a1a] rounded-full overflow-hidden relative">
+                            <div
+                              className="h-full bg-gradient-to-r from-[#22AADE] to-[#22AADE]/80 rounded-full"
+                              style={{ width: '100%' }}
+                            />
+                          </div>
+                          <span className="text-[10px] text-white font-bold w-28 text-right">{formatMoney(resultado.valorEstimado)}</span>
+                        </div>
+                        {/* Años proyectados */}
+                        {Array.from({ length: Math.min(proyeccion, 8) }, (_, i) => {
                           const year = i + 1;
                           const val = resultado.valorEstimado * Math.pow(1 + resultado.plusvaliaAnual / 100, year);
-                          const maxVal = resultado.valorEstimado * Math.pow(1 + resultado.plusvaliaAnual / 100, Math.min(proyeccion, 10));
-                          const width = ((val - resultado.valorEstimado) / (maxVal - resultado.valorEstimado)) * 100;
+                          const maxVal = resultado.valorEstimado * Math.pow(1 + resultado.plusvaliaAnual / 100, Math.min(proyeccion, 8));
+                          const incremento = val - resultado.valorEstimado;
+                          const width = ((incremento) / (maxVal - resultado.valorEstimado)) * 100;
                           return (
                             <div key={year} className="flex items-center gap-3">
-                              <span className="text-[10px] text-gray-500 w-12 text-right">Año {year}</span>
-                              <div className="flex-grow h-3 bg-[#1a1a1a] rounded-full overflow-hidden">
+                              <span className="text-[10px] text-gray-500 w-16 text-right">+{year} año{year > 1 ? 's' : ''}</span>
+                              <div className="flex-grow h-4 bg-[#1a1a1a] rounded-full overflow-hidden relative">
                                 <div
-                                  className="h-full bg-gradient-to-r from-[#22AADE] to-[#22AADE]/60 rounded-full transition-all duration-700"
-                                  style={{ width: `${Math.max(width, 5)}%` }}
+                                  className="h-full bg-gradient-to-r from-[#22AADE] to-[#4ade80] rounded-full transition-all duration-700"
+                                  style={{ width: `${Math.max(width, 2)}%` }}
                                 />
                               </div>
-                              <span className="text-[10px] text-gray-400 w-24 text-right">{formatMoney(val)}</span>
+                              <div className="w-28 text-right">
+                                <span className="text-[10px] text-white font-bold block">{formatMoney(val)}</span>
+                                <span className="text-[9px] text-green-400">+{formatMoney(incremento)}</span>
+                              </div>
                             </div>
                           );
                         })}
+                        {/* Valor final si hay más años */}
+                        {proyeccion > 8 && (
+                          <div className="flex items-center gap-3 pt-2 border-t border-white/5">
+                            <span className="text-[10px] text-[#22AADE] font-bold w-16 text-right">+{proyeccion} años</span>
+                            <div className="flex-grow h-4 bg-[#1a1a1a] rounded-full overflow-hidden relative">
+                              <div
+                                className="h-full bg-gradient-to-r from-[#22AADE] to-[#4ade80] rounded-full"
+                                style={{ width: '100%' }}
+                              />
+                            </div>
+                            <div className="w-28 text-right">
+                              <span className="text-[10px] text-[#22AADE] font-black block">{formatMoney(resultado.valorFuturo)}</span>
+                              <span className="text-[9px] text-green-400 font-bold">+{formatMoney(resultado.plusvaliaProyectada)}</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
