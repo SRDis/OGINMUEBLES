@@ -41,14 +41,14 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/og_icono.png', sizes: 'any' },
-      { url: '/og_icono.png', type: 'image/png', sizes: '32x32' },
-      { url: '/og_icono.png', type: 'image/png', sizes: '16x16' },
-      { url: '/og_icono.png', type: 'image/png', sizes: '192x192' },
-      { url: '/og_icono.png', type: 'image/png', sizes: '512x512' },
+      { url: '/Recurso 7logo_crew@4x.png', sizes: 'any' },
+      { url: '/Recurso 7logo_crew@4x.png', type: 'image/png', sizes: '32x32' },
+      { url: '/Recurso 7logo_crew@4x.png', type: 'image/png', sizes: '16x16' },
+      { url: '/Recurso 7logo_crew@4x.png', type: 'image/png', sizes: '192x192' },
+      { url: '/Recurso 7logo_crew@4x.png', type: 'image/png', sizes: '512x512' },
     ],
     apple: [
-      { url: '/og_icono.png', sizes: '180x180', type: 'image/png' },
+      { url: '/Recurso 7logo_crew@4x.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   manifest: '/site.webmanifest',

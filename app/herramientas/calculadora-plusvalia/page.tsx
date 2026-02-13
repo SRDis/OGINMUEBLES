@@ -1,0 +1,578 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+
+/* ─────────────────────────────────────────────────────────────
+   DATOS DE MERCADO — ESTADO DE MÉXICO / VALLE DE BRAVO
+   ───────────────────────────────────────────────────────────── */
+
+type ZonaData = {
+  name: string;
+  precioM2Min: number;
+  precioM2Max: number;
+  plusvaliaAnual: number; // porcentaje promedio anual
+  desc: string;
+};
+
+const zonas: Record<string, ZonaData> = {
+  'valle-bravo-premium': {
+    name: 'Valle de Bravo — Zona Premium (La Peña, Avándaro Centro)',
+    precioM2Min: 18000,
+    precioM2Max: 45000,
+    plusvaliaAnual: 8.5,
+    desc: 'Zonas más exclusivas con vista al lago, cercanía a club de golf y servicios premium.',
+  },
+  'valle-bravo-residencial': {
+    name: 'Valle de Bravo — Residencial (Avándaro, El Santuario)',
+    precioM2Min: 12000,
+    precioM2Max: 25000,
+    plusvaliaAnual: 7.2,
+    desc: 'Fraccionamientos residenciales establecidos con servicios completos y seguridad.',
+  },
+  'valle-bravo-centro': {
+    name: 'Valle de Bravo — Centro Histórico',
+    precioM2Min: 10000,
+    precioM2Max: 22000,
+    plusvaliaAnual: 6.8,
+    desc: 'Zona colonial con alto valor turístico, comercios y restaurantes.',
+  },
+  'valle-bravo-periferia': {
+    name: 'Valle de Bravo — Periferia y Comunidades',
+    precioM2Min: 3000,
+    precioM2Max: 10000,
+    plusvaliaAnual: 5.5,
+    desc: 'Terrenos en comunidades aledañas, zonas de crecimiento con potencial.',
+  },
+  'metepec': {
+    name: 'Metepec',
+    precioM2Min: 12000,
+    precioM2Max: 30000,
+    plusvaliaAnual: 7.0,
+    desc: 'Zona residencial consolidada con alta demanda, cercana a Toluca.',
+  },
+  'toluca-centro': {
+    name: 'Toluca — Centro y Zonas Consolidadas',
+    precioM2Min: 8000,
+    precioM2Max: 20000,
+    plusvaliaAnual: 5.8,
+    desc: 'Capital del estado, zona comercial y de servicios con infraestructura desarrollada.',
+  },
+  'lerma-ocoyoacac': {
+    name: 'Lerma / Ocoyoacac / San Mateo Atenco',
+    precioM2Min: 6000,
+    precioM2Max: 16000,
+    plusvaliaAnual: 6.5,
+    desc: 'Corredor industrial y residencial con crecimiento acelerado por cercanía a CDMX.',
+  },
+  'huixquilucan-interlomas': {
+    name: 'Huixquilucan / Interlomas',
+    precioM2Min: 25000,
+    precioM2Max: 55000,
+    plusvaliaAnual: 6.0,
+    desc: 'Zona residencial de lujo, desarrollo vertical y comercial de alta gama.',
+  },
+  'naucalpan-satmex': {
+    name: 'Naucalpan / Satélite / Lomas Verdes',
+    precioM2Min: 14000,
+    precioM2Max: 32000,
+    plusvaliaAnual: 5.2,
+    desc: 'Zonas residenciales consolidadas con acceso a servicios y vías rápidas.',
+  },
+  'atizapan-nicolasmx': {
+    name: 'Atizapán / Nicolás Romero / Zona Norte',
+    precioM2Min: 5000,
+    precioM2Max: 14000,
+    plusvaliaAnual: 5.8,
+    desc: 'Zonas en crecimiento, opciones de inversión accesibles con plusvalía en ascenso.',
+  },
+  'ecatepec-tecamac': {
+    name: 'Ecatepec / Tecámac / Zona Oriente',
+    precioM2Min: 4000,
+    precioM2Max: 12000,
+    plusvaliaAnual: 4.5,
+    desc: 'Alta densidad poblacional, vivienda de interés social a medio, buena conectividad.',
+  },
+  'ixtapan-tonatico': {
+    name: 'Ixtapan de la Sal / Tonatico',
+    precioM2Min: 4000,
+    precioM2Max: 12000,
+    plusvaliaAnual: 5.0,
+    desc: 'Zona turística con aguas termales, potencial vacacional y de retiro.',
+  },
+  'malinalco': {
+    name: 'Malinalco',
+    precioM2Min: 6000,
+    precioM2Max: 18000,
+    plusvaliaAnual: 6.5,
+    desc: 'Pueblo mágico con desarrollo residencial campestre de alta plusvalía.',
+  },
+};
+
+const tiposPropiedad = [
+  { value: 'casa', label: 'Casa Habitación', factor: 1.0 },
+  { value: 'departamento', label: 'Departamento', factor: 0.95 },
+  { value: 'terreno', label: 'Terreno / Lote', factor: 0.7 },
+  { value: 'comercial', label: 'Local Comercial', factor: 1.1 },
+  { value: 'oficina', label: 'Oficina', factor: 1.05 },
+  { value: 'bodega', label: 'Bodega / Industrial', factor: 0.65 },
+];
+
+const estadoFisico = [
+  { value: 'excelente', label: 'Excelente — Recién construido o remodelado', factor: 1.15 },
+  { value: 'bueno', label: 'Bueno — Bien mantenido', factor: 1.0 },
+  { value: 'regular', label: 'Regular — Necesita mejoras menores', factor: 0.85 },
+  { value: 'malo', label: 'Malo — Requiere remodelación', factor: 0.65 },
+];
+
+const amenidadesDisponibles = [
+  { id: 'alberca', label: 'Alberca', factor: 1.08 },
+  { id: 'jardin', label: 'Jardín amplio', factor: 1.05 },
+  { id: 'seguridad', label: 'Seguridad / Caseta', factor: 1.06 },
+  { id: 'estacionamiento', label: 'Estacionamiento techado', factor: 1.04 },
+  { id: 'vista', label: 'Vista panorámica / al lago', factor: 1.12 },
+  { id: 'acabados', label: 'Acabados de lujo', factor: 1.10 },
+  { id: 'areas_comunes', label: 'Áreas comunes / Club house', factor: 1.05 },
+  { id: 'terraza', label: 'Terraza / Roof garden', factor: 1.06 },
+];
+
+/* ─────────────────────────────────────────────────────────────
+   COMPONENTE
+   ───────────────────────────────────────────────────────────── */
+
+export default function CalculadoraPlusvaliaPage() {
+  const [zona, setZona] = useState('');
+  const [tipo, setTipo] = useState('casa');
+  const [metros, setMetros] = useState('');
+  const [estado, setEstado] = useState('bueno');
+  const [antiguedad, setAntiguedad] = useState('');
+  const [amenidades, setAmenidades] = useState<string[]>([]);
+  const [proyeccion, setProyeccion] = useState(5);
+  const [resultado, setResultado] = useState<{
+    valorActualMin: number;
+    valorActualMax: number;
+    valorEstimado: number;
+    plusvaliaProyectada: number;
+    valorFuturo: number;
+    plusvaliaAnual: number;
+    precioM2: number;
+  } | null>(null);
+
+  const toggleAmenidad = (id: string) => {
+    setAmenidades((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    );
+  };
+
+  const calcular = () => {
+    if (!zona || !metros) return;
+
+    const zonaData = zonas[zona];
+    const tipoData = tiposPropiedad.find((t) => t.value === tipo)!;
+    const estadoData = estadoFisico.find((e) => e.value === estado)!;
+    const m2 = parseFloat(metros);
+    const years = parseInt(antiguedad) || 0;
+
+    // Precio base por m² (promedio ponderado)
+    const precioBase = (zonaData.precioM2Min + zonaData.precioM2Max) / 2;
+
+    // Factor de tipo de propiedad
+    let precioAjustado = precioBase * tipoData.factor;
+
+    // Factor de estado físico
+    precioAjustado *= estadoData.factor;
+
+    // Factor de antigüedad (depreciación 1% por año, máx 25%)
+    const depreciacion = Math.min(years * 0.01, 0.25);
+    if (tipo !== 'terreno') {
+      precioAjustado *= (1 - depreciacion);
+    }
+
+    // Factor de amenidades
+    amenidades.forEach((amenId) => {
+      const amen = amenidadesDisponibles.find((a) => a.id === amenId);
+      if (amen) precioAjustado *= amen.factor;
+    });
+
+    const valorActualMin = zonaData.precioM2Min * m2 * tipoData.factor * estadoData.factor;
+    const valorActualMax = zonaData.precioM2Max * m2 * tipoData.factor * estadoData.factor;
+    const valorEstimado = precioAjustado * m2;
+
+    // Plusvalía proyectada
+    const plusvaliaAnual = zonaData.plusvaliaAnual;
+    const valorFuturo = valorEstimado * Math.pow(1 + plusvaliaAnual / 100, proyeccion);
+    const plusvaliaProyectada = valorFuturo - valorEstimado;
+
+    setResultado({
+      valorActualMin,
+      valorActualMax,
+      valorEstimado,
+      plusvaliaProyectada,
+      valorFuturo,
+      plusvaliaAnual,
+      precioM2: precioAjustado,
+    });
+  };
+
+  const formatMoney = (n: number) =>
+    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(n);
+
+  return (
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
+
+      {/* HERO */}
+      <section className="relative pt-32 pb-16 overflow-hidden">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="flex items-center justify-center gap-2 mb-6 text-xs text-gray-500">
+              <Link href="/herramientas" className="hover:text-[#22AADE] transition-colors">Herramientas</Link>
+              <span>/</span>
+              <span className="text-gray-400">Calculadora de Plusvalía</span>
+            </div>
+
+            <span className="inline-block py-1 px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-8">
+              Estado de México · Mercado Mexicano
+            </span>
+
+            <h1 className="text-4xl md:text-6xl font-extralight tracking-tighter leading-[0.95] mb-8">
+              Calculadora de{' '}
+              <span className="font-bold italic text-[#22AADE]">Plusvalía</span>
+            </h1>
+
+            <p className="text-lg text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
+              Estima el valor actual de tu propiedad y proyecta su plusvalía a futuro,
+              basado en datos del mercado inmobiliario del <strong className="text-white">Estado de México</strong>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CALCULADORA */}
+      <section className="py-16">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {/* FORMULARIO */}
+            <div className="lg:col-span-2 space-y-8">
+
+              {/* Zona */}
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">1. Ubicación</h3>
+                <p className="text-gray-500 text-xs mb-6">Selecciona la zona más cercana a tu propiedad</p>
+
+                <select
+                  value={zona}
+                  onChange={(e) => setZona(e.target.value)}
+                  className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#22AADE] transition-colors appearance-none"
+                >
+                  <option value="">Seleccionar zona...</option>
+                  {Object.entries(zonas).map(([key, z]) => (
+                    <option key={key} value={key}>{z.name}</option>
+                  ))}
+                </select>
+
+                {zona && (
+                  <div className="mt-4 p-4 bg-[#22AADE]/5 border border-[#22AADE]/20 rounded-lg">
+                    <p className="text-sm text-gray-300 font-light">{zonas[zona].desc}</p>
+                    <div className="flex gap-6 mt-3">
+                      <span className="text-[10px] text-[#22AADE] uppercase tracking-wider">
+                        Rango: {formatMoney(zonas[zona].precioM2Min)} — {formatMoney(zonas[zona].precioM2Max)} /m²
+                      </span>
+                      <span className="text-[10px] text-[#22AADE] uppercase tracking-wider">
+                        Plusvalía anual: ~{zonas[zona].plusvaliaAnual}%
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Tipo y metros */}
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">2. Características</h3>
+                <p className="text-gray-500 text-xs mb-6">Tipo de propiedad y superficie</p>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Tipo de propiedad
+                    </label>
+                    <select
+                      value={tipo}
+                      onChange={(e) => setTipo(e.target.value)}
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#22AADE] transition-colors appearance-none"
+                    >
+                      {tiposPropiedad.map((t) => (
+                        <option key={t.value} value={t.value}>{t.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Superficie (m²)
+                    </label>
+                    <input
+                      type="number"
+                      value={metros}
+                      onChange={(e) => setMetros(e.target.value)}
+                      placeholder="Ej: 250"
+                      min="1"
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#22AADE] transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Estado físico
+                    </label>
+                    <select
+                      value={estado}
+                      onChange={(e) => setEstado(e.target.value)}
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-[#22AADE] transition-colors appearance-none"
+                    >
+                      {estadoFisico.map((e) => (
+                        <option key={e.value} value={e.value}>{e.label}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-[0.2em] text-gray-400 font-bold mb-2">
+                      Antigüedad (años)
+                    </label>
+                    <input
+                      type="number"
+                      value={antiguedad}
+                      onChange={(e) => setAntiguedad(e.target.value)}
+                      placeholder="Ej: 5"
+                      min="0"
+                      className="w-full bg-[#050505] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-[#22AADE] transition-colors"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Amenidades */}
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">3. Amenidades</h3>
+                <p className="text-gray-500 text-xs mb-6">Selecciona las que apliquen a tu propiedad</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {amenidadesDisponibles.map((amen) => (
+                    <label
+                      key={amen.id}
+                      className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-300 ${
+                        amenidades.includes(amen.id)
+                          ? 'bg-[#22AADE]/5 border border-[#22AADE]/20'
+                          : 'bg-white/[0.02] border border-transparent hover:bg-white/5'
+                      }`}
+                    >
+                      <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${
+                        amenidades.includes(amen.id)
+                          ? 'bg-[#22AADE] border-[#22AADE]'
+                          : 'border-gray-600'
+                      }`}>
+                        {amenidades.includes(amen.id) && (
+                          <svg className="w-3 h-3 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className="text-sm text-gray-400 font-light">{amen.label}</span>
+                      <span className="text-[9px] text-[#22AADE] ml-auto">+{Math.round((amen.factor - 1) * 100)}%</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Proyección */}
+              <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                <h3 className="text-white font-bold uppercase tracking-wider text-sm mb-1">4. Proyección</h3>
+                <p className="text-gray-500 text-xs mb-6">¿A cuántos años quieres proyectar la plusvalía?</p>
+
+                <div className="flex items-center gap-6">
+                  {[1, 3, 5, 10, 15, 20].map((y) => (
+                    <button
+                      key={y}
+                      onClick={() => setProyeccion(y)}
+                      className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${
+                        proyeccion === y
+                          ? 'bg-[#22AADE] text-black'
+                          : 'bg-white/5 text-gray-400 hover:text-white border border-white/10'
+                      }`}
+                    >
+                      {y} {y === 1 ? 'año' : 'años'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Botón Calcular */}
+              <button
+                onClick={calcular}
+                disabled={!zona || !metros}
+                className={`w-full py-5 rounded-sm font-bold text-[12px] uppercase tracking-[0.2em] transition-all duration-300 ${
+                  zona && metros
+                    ? 'bg-[#22AADE] text-black hover:bg-white shadow-[0_0_30px_rgba(34,170,222,0.3)]'
+                    : 'bg-white/5 text-gray-600 cursor-not-allowed'
+                }`}
+              >
+                Calcular Valor y Plusvalía
+              </button>
+            </div>
+
+            {/* RESULTADO */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-28 space-y-6">
+
+                {resultado ? (
+                  <>
+                    {/* Valor estimado */}
+                    <div className="bg-[#0a0a0a] border border-[#22AADE]/20 rounded-sm p-6 md:p-8">
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-[#22AADE] font-bold block mb-4">Valor Estimado Actual</span>
+                      <p className="text-3xl md:text-4xl font-black text-white mb-2">{formatMoney(resultado.valorEstimado)}</p>
+                      <p className="text-xs text-gray-500 mb-4">
+                        Rango: {formatMoney(resultado.valorActualMin)} — {formatMoney(resultado.valorActualMax)}
+                      </p>
+                      <div className="h-[1px] bg-white/5 mb-4" />
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-500">Precio por m²</span>
+                        <span className="text-white font-bold">{formatMoney(resultado.precioM2)}</span>
+                      </div>
+                    </div>
+
+                    {/* Plusvalía */}
+                    <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-[#22AADE] font-bold block mb-4">
+                        Proyección a {proyeccion} {proyeccion === 1 ? 'año' : 'años'}
+                      </span>
+                      <p className="text-3xl md:text-4xl font-black text-[#22AADE] mb-2">{formatMoney(resultado.valorFuturo)}</p>
+                      <p className="text-xs text-gray-500 mb-4">
+                        Ganancia estimada: <span className="text-green-400 font-bold">+{formatMoney(resultado.plusvaliaProyectada)}</span>
+                      </p>
+                      <div className="h-[1px] bg-white/5 mb-4" />
+                      <div className="flex justify-between text-xs mb-2">
+                        <span className="text-gray-500">Plusvalía anual promedio</span>
+                        <span className="text-[#22AADE] font-bold">{resultado.plusvaliaAnual}%</span>
+                      </div>
+                      <div className="flex justify-between text-xs">
+                        <span className="text-gray-500">Incremento total</span>
+                        <span className="text-green-400 font-bold">
+                          +{Math.round(((resultado.valorFuturo / resultado.valorEstimado) - 1) * 100)}%
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Gráfica simplificada */}
+                    <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-6 md:p-8">
+                      <span className="text-[10px] uppercase tracking-[0.3em] text-gray-500 font-bold block mb-4">Crecimiento Proyectado</span>
+                      <div className="space-y-3">
+                        {Array.from({ length: Math.min(proyeccion, 10) }, (_, i) => {
+                          const year = i + 1;
+                          const val = resultado.valorEstimado * Math.pow(1 + resultado.plusvaliaAnual / 100, year);
+                          const maxVal = resultado.valorEstimado * Math.pow(1 + resultado.plusvaliaAnual / 100, Math.min(proyeccion, 10));
+                          const width = ((val - resultado.valorEstimado) / (maxVal - resultado.valorEstimado)) * 100;
+                          return (
+                            <div key={year} className="flex items-center gap-3">
+                              <span className="text-[10px] text-gray-500 w-12 text-right">Año {year}</span>
+                              <div className="flex-grow h-3 bg-[#1a1a1a] rounded-full overflow-hidden">
+                                <div
+                                  className="h-full bg-gradient-to-r from-[#22AADE] to-[#22AADE]/60 rounded-full transition-all duration-700"
+                                  style={{ width: `${Math.max(width, 5)}%` }}
+                                />
+                              </div>
+                              <span className="text-[10px] text-gray-400 w-24 text-right">{formatMoney(val)}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="bg-[#0a0a0a] border border-amber-500/20 rounded-sm p-5">
+                      <p className="text-[10px] text-amber-400 uppercase tracking-wider font-bold mb-2">⚠️ Aviso Importante</p>
+                      <p className="text-xs text-gray-500 font-light leading-relaxed">
+                        Esta es una estimación referencial basada en promedios del mercado. El valor real puede variar según condiciones
+                        específicas del inmueble, negociación, oferta y demanda local. Para un avalúo formal, consulta a un valuador certificado.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="bg-[#0a0a0a] border border-white/5 rounded-sm p-8 text-center">
+                    <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-white font-bold mb-2">Completa los datos</h3>
+                    <p className="text-gray-500 text-sm font-light">
+                      Selecciona zona, tipo de propiedad y superficie para obtener tu estimación de valor y plusvalía.
+                    </p>
+                  </div>
+                )}
+
+                <Link
+                  href="/contacto"
+                  className="block text-center bg-white/5 border border-white/10 py-4 rounded-sm text-[11px] uppercase tracking-[0.2em] text-gray-400 hover:text-[#22AADE] hover:border-[#22AADE] transition-all"
+                >
+                  ¿Necesitas un avalúo formal? →
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* METODOLOGÍA */}
+      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">Metodología</h2>
+            <h3 className="text-3xl md:text-4xl font-extralight text-white">
+              ¿Cómo <span className="font-bold">calculamos?</span>
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            {[
+              { title: 'Datos de Mercado', desc: 'Precios por m² basados en transacciones reales y análisis del mercado inmobiliario del Estado de México.' },
+              { title: 'Factores de Ajuste', desc: 'Tipo de propiedad, estado físico, antigüedad y amenidades ajustan el valor base según las condiciones reales.' },
+              { title: 'Plusvalía Histórica', desc: 'Tasas de apreciación calculadas con base en tendencias del mercado local de los últimos 5 años.' },
+              { title: 'Proyección Compuesta', desc: 'Interés compuesto aplicado sobre la tasa de plusvalía anual para proyectar el valor a futuro.' },
+            ].map((item, idx) => (
+              <div key={idx} className="text-center">
+                <div className="w-10 h-10 bg-[#22AADE]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-[#22AADE] font-black text-sm">{String(idx + 1).padStart(2, '0')}</span>
+                </div>
+                <h4 className="text-white font-bold text-sm uppercase tracking-wider mb-2">{item.title}</h4>
+                <p className="text-gray-500 text-xs font-light leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-24 bg-[#050505] relative overflow-hidden">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-[300px] bg-gradient-to-t from-[#22AADE]/10 to-transparent blur-[80px]" />
+        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+          <h2 className="text-3xl md:text-5xl font-extralight text-white mb-6 tracking-tighter">
+            ¿Quieres un análisis{' '}
+            <span className="font-bold italic">profesional?</span>
+          </h2>
+          <p className="text-lg mb-10 text-gray-400 font-light max-w-2xl mx-auto">
+            Esta calculadora es una referencia. Para un avalúo bancario certificado o un análisis
+            comparativo de mercado personalizado, contáctanos.
+          </p>
+          <Link
+            href="/contacto"
+            className="px-10 py-4 bg-white text-black font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-[#22AADE] transition-all duration-300 rounded-sm inline-block"
+          >
+            Solicitar Avalúo Profesional
+          </Link>
+        </div>
+      </section>
+    </div>
+  );
+}

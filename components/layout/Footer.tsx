@@ -70,6 +70,12 @@ export default function Footer() {
                 { name: 'Todas las Propiedades', href: '/propiedades' },
                 { name: 'Portafolio Venta', href: '/venta' },
                 { name: 'Portafolio Renta', href: '/renta' },
+                { name: 'Mantenimiento de Terrenos', href: '/mantenimiento-terrenos' },
+                { name: 'Levantamientos Topográficos', href: '/levantamientos-topograficos' },
+                { name: 'Locaciones TV y Cine', href: '/locaciones' },
+                { name: 'Renders Arquitectónicos', href: '/renders' },
+                { name: 'Herramientas Gratis', href: '/herramientas' },
+                { name: 'Academia Inmobiliaria', href: '/academia' },
                 { name: 'Nuestra Firma', href: '/nosotros' },
                 { name: 'Contacto & Citas', href: '/contacto' },
               ].map((link) => (

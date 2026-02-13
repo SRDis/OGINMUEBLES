@@ -166,11 +166,11 @@ export default function NosotrosPage() {
               "Gestión integral de propiedades",
               "Marketing inmobiliario estratégico",
               "Análisis de mercado y plusvalía",
-              "Bienes inmuebles comerciales",
+              "Mantenimiento de terrenos",
+              "Levantamientos topográficos",
+              "Locaciones para TV y cine",
+              "Renders arquitectónicos",
               "Consultoría legal inmobiliaria",
-              "Relaciones públicas (PR)",
-              "Coordinación de eventos",
-              "Lanzamiento de proyectos",
               "Fotografía profesional"
             ].map((service, index) => (
               <div key={index} className="flex items-center gap-4 group cursor-default">
