@@ -11,11 +11,14 @@ let supabaseClientInstance: SupabaseClient | null = null;
  * 
  * IMPORTANTE: Este cliente debe usarse solo en componentes del cliente ('use client').
  * Para el servidor, usa createServerComponentClient o createRouteHandlerClient.
+ * 
+ * Retorna null si se llama en el servidor (durante prerenderizado).
  */
-export function getSupabaseClient(): SupabaseClient {
+export function getSupabaseClient(): SupabaseClient | null {
   // Verificar si estamos en el cliente
   if (typeof window === 'undefined') {
-    throw new Error('getSupabaseClient solo puede usarse en componentes del cliente');
+    // Durante el prerenderizado, retornar null en lugar de lanzar error
+    return null;
   }
 
   if (!supabaseClientInstance) {

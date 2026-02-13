@@ -18,11 +18,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  // Usar useMemo para asegurar que solo se cree una instancia
-  const supabase = useMemo(() => getSupabaseClient(), []);
+  // Crear el cliente solo en el cliente usando useMemo
+  // Durante el prerenderizado, será null
+  const supabase = useMemo(() => {
+    if (typeof window !== 'undefined') {
+      return getSupabaseClient();
+    }
+    return null;
+  }, []);
 
   // useCallback para que la función no se recree en cada render
   const signIn = useCallback(async (email: string, password: string) => {
+    if (!supabase) {
+      return { error: new Error('Cliente de Supabase no disponible') };
+    }
     try {
       console.log('🔐 AuthContext: Intentando login con:', email);
       
@@ -46,6 +55,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // useCallback para que la función no se recree en cada render
   const signOut = useCallback(async () => {
+    if (!supabase) {
+      throw new Error('Cliente de Supabase no disponible');
+    }
     try {
       const { error } = await supabase.auth.signOut();
       if (error) {
@@ -59,6 +71,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [supabase]);
 
   useEffect(() => {
+    // Solo ejecutar si tenemos el cliente de Supabase (en el cliente)
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     // Verificar sesión actual
     const checkUser = async () => {
       try {
