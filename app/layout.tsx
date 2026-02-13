@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/layout/Navbar';
@@ -12,6 +12,13 @@ import StructuredData from '@/components/seo/StructuredData';
 const inter = Inter({ subsets: ['latin'] });
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.oginmuebles.com';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#050505',
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -86,17 +93,11 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
-  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
     title: 'Oliver López Guijoza',
   },
-  themeColor: '#050505',
 };
 
 export default function RootLayout({

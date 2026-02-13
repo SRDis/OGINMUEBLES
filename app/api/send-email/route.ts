@@ -50,9 +50,10 @@ export async function POST(request: NextRequest) {
 
     if (gmailUser && gmailAppPassword) {
       try {
-        const nodemailer = require('nodemailer');
+        // Importar nodemailer dinámicamente solo si es necesario
+        const nodemailer = await import('nodemailer');
         
-        const transporter = nodemailer.createTransport({
+        const transporter = nodemailer.default.createTransport({
           service: 'gmail',
           auth: {
             user: gmailUser,
