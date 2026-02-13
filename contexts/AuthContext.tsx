@@ -1,9 +1,9 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import type { User } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase-client';
 
 interface AuthContextType {
   user: User | null;
@@ -18,7 +18,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const supabase = createClientComponentClient();
+  // Usar useMemo para asegurar que solo se cree una instancia
+  const supabase = useMemo(() => getSupabaseClient(), []);
 
   // useCallback para que la función no se recree en cada render
   const signIn = useCallback(async (email: string, password: string) => {
