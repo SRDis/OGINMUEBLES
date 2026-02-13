@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import ChecklistDownloader from './ChecklistDownloader';
-import DocumentCard from './DocumentCard';
+import DocumentSection from './DocumentSection';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.oginmuebles.com';
 
@@ -639,20 +639,15 @@ export default function GuiaDocumentacionPage() {
               </div>
             </div>
 
-            {/* Categorías de documentos */}
-            <div className="space-y-10">
+            {/* Categorías de documentos con acordeón */}
+            <div className="space-y-4">
               {op.documentos.map((cat, catIdx) => (
-                <div key={catIdx}>
-                  <h3 className="text-sm font-bold uppercase tracking-[0.2em] mb-6" style={{ color: op.color }}>
-                    {cat.category}
-                  </h3>
-
-                  <div className="space-y-3">
-                    {cat.items.map((item, itemIdx) => (
-                      <DocumentCard key={itemIdx} item={item} color={op.color} />
-                    ))}
-                  </div>
-                </div>
+                <DocumentSection
+                  key={catIdx}
+                  category={cat}
+                  color={op.color}
+                  defaultOpen={catIdx === 0}
+                />
               ))}
             </div>
           </div>
