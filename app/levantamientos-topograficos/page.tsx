@@ -246,7 +246,7 @@ export default function LevantamientosTopograficosPage() {
       {/* ============================================= */}
       {/* 1. HERO SECTION */}
       {/* ============================================= */}
-      <section className="relative pt-32 pb-24 overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-24 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#22AADE]/3 blur-[100px] rounded-full pointer-events-none -z-10" />
 
@@ -320,7 +320,7 @@ export default function LevantamientosTopograficosPage() {
       {/* ============================================= */}
       {/* 3. SERVICIOS */}
       {/* ============================================= */}
-      <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#0a0a0a] relative overflow-hidden">
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -362,7 +362,7 @@ export default function LevantamientosTopograficosPage() {
       {/* ============================================= */}
       {/* 4. EJEMPLOS DE PLANOS TOPOGRÁFICOS */}
       {/* ============================================= */}
-      <section id="ejemplos" className="py-24 bg-[#050505] border-y border-white/5">
+      <section id="ejemplos" className="py-12 sm:py-16 md:py-24 bg-[#050505] border-y border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-20">
             <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
@@ -422,7 +422,7 @@ export default function LevantamientosTopograficosPage() {
       {/* ============================================= */}
       {/* 5. PROCESO */}
       {/* ============================================= */}
-      <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#0a0a0a] relative overflow-hidden">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

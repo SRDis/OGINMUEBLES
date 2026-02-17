@@ -582,28 +582,28 @@ export default function ChecklistPropiedadPage() {
       {/* ============================================= */}
       {/* HERO */}
       {/* ============================================= */}
-      <section className="relative pt-32 pb-16 overflow-hidden no-print">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 overflow-hidden no-print">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
             {/* Breadcrumb */}
-            <div className="flex items-center justify-center gap-2 mb-6 text-xs text-gray-500">
-              <Link href="/herramientas" className="hover:text-[#22AADE] transition-colors">Herramientas</Link>
+            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs text-gray-500 px-4">
+              <Link href="/herramientas" className="hover:text-[#22AADE] transition-colors touch-manipulation">Herramientas</Link>
               <span>/</span>
               <span className="text-gray-400">Checklist de Propiedad</span>
             </div>
 
-            <span className="inline-block py-1 px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-8 backdrop-blur-md">
+            <span className="inline-block py-1.5 px-3 sm:px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold mb-6 sm:mb-8 backdrop-blur-md">
               Herramienta Gratuita
             </span>
 
-            <h1 className="text-4xl md:text-6xl font-extralight tracking-tighter leading-[0.95] mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tighter leading-[0.95] mb-6 sm:mb-8 px-4">
               ¿Tu propiedad está lista para{' '}
               <span className="font-bold italic text-[#22AADE]">{mode === 'venta' ? 'venderse' : 'rentarse'}?</span>
             </h1>
 
-            <p className="text-lg text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-8">
+            <p className="text-base sm:text-lg text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-8 px-4">
               Revisa cada punto de esta checklist profesional para evaluar qué tan preparada está tu propiedad
               para salir al mercado. Al finalizar, podrás descargar o imprimir tu evaluación.
             </p>

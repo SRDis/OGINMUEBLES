@@ -292,7 +292,8 @@ export default function Navbar() {
             {/* MOBILE / TABLET TOGGLE */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden flex flex-col justify-center items-center w-8 h-8 z-[110]"
+              className="lg:hidden flex flex-col justify-center items-center w-10 h-10 z-[110] touch-manipulation"
+              style={{ minWidth: '44px', minHeight: '44px' }}
               aria-label="Menú"
             >
               <span className={`bg-white h-0.5 w-5 rounded-full transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-1' : ''}`} />
@@ -327,7 +328,8 @@ export default function Navbar() {
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 transition-colors"
+              className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 active:bg-white/15 transition-colors touch-manipulation"
+              style={{ minWidth: '44px', minHeight: '44px' }}
               aria-label="Cerrar menú"
             >
               <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -348,13 +350,14 @@ export default function Navbar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center justify-between py-3 px-3 rounded-lg transition-colors ${
+                    className={`flex items-center justify-between py-3.5 px-4 rounded-lg transition-colors touch-manipulation ${
                       pathname === item.href
                         ? 'text-[#22AADE] bg-[#22AADE]/5 font-bold'
-                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                        : 'text-gray-300 active:text-white active:bg-white/5'
                     }`}
+                    style={{ minHeight: '48px' }}
                   >
-                    <span className="text-[12px] uppercase tracking-[0.12em]">{item.name}</span>
+                    <span className="text-sm uppercase tracking-[0.12em]">{item.name}</span>
                     {pathname === item.href && (
                       <div className="w-1.5 h-1.5 rounded-full bg-[#22AADE]" />
                     )}
@@ -366,7 +369,8 @@ export default function Navbar() {
               <div className="border-t border-white/5 pt-4 mb-4">
                 <button
                   onClick={() => setMobileServiciosOpen(!mobileServiciosOpen)}
-                  className="w-full flex items-center justify-between px-1 mb-3"
+                  className="w-full flex items-center justify-between px-4 py-3 mb-3 rounded-lg hover:bg-white/5 active:bg-white/10 transition-colors touch-manipulation"
+                  style={{ minHeight: '48px' }}
                 >
                   <span className="text-[8px] uppercase tracking-[0.4em] text-gray-600 font-bold">Servicios</span>
                   <svg
@@ -385,6 +389,8 @@ export default function Navbar() {
                       key={item.name}
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
+                      className="touch-manipulation"
+                      style={{ minHeight: '48px' }}
                       className={`flex items-center gap-3 py-2.5 px-3 rounded-lg transition-colors ${
                         pathname === item.href
                           ? 'text-[#22AADE] bg-[#22AADE]/5'

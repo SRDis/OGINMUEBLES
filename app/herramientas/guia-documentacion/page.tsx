@@ -581,27 +581,27 @@ export default function GuiaDocumentacionPage() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
 
       {/* HERO */}
-      <section className="relative pt-32 pb-16 overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-6 text-xs text-gray-500">
-              <Link href="/herramientas" className="hover:text-[#22AADE] transition-colors">Herramientas</Link>
+            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs text-gray-500 px-4">
+              <Link href="/herramientas" className="hover:text-[#22AADE] transition-colors touch-manipulation">Herramientas</Link>
               <span>/</span>
               <span className="text-gray-400">Guía de Documentación</span>
             </div>
 
-            <span className="inline-block py-1 px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-8">
+            <span className="inline-block py-1.5 px-3 sm:px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold mb-6 sm:mb-8">
               Legislación Mexicana Vigente
             </span>
 
-            <h1 className="text-4xl md:text-6xl font-extralight tracking-tighter leading-[0.95] mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight tracking-tighter leading-[0.95] mb-6 sm:mb-8 px-4">
               Guía de{' '}
               <span className="font-bold italic text-[#22AADE]">Documentación</span>
             </h1>
 
-            <p className="text-lg text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-6">
+            <p className="text-base sm:text-lg text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-6 px-4">
               Lista completa y actualizada de todos los documentos necesarios para{' '}
               <strong className="text-white">comprar, vender o rentar</strong> un inmueble en México,
               con referencias a la legislación aplicable.
@@ -708,9 +708,9 @@ export default function GuiaDocumentacionPage() {
       </section>
 
       {/* TIMELINE DE TRÁMITES */}
-      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
               Timeline
             </h2>
@@ -760,9 +760,9 @@ export default function GuiaDocumentacionPage() {
       </section>
 
       {/* DOCUMENTOS FRECUENTEMENTE OLVIDADOS */}
-      <section className="py-24 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-16">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-12 md:mb-16">
             <h2 className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase mb-4">
               Errores Comunes
             </h2>
@@ -774,7 +774,7 @@ export default function GuiaDocumentacionPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 max-w-5xl mx-auto">
             {[
               {
                 doc: 'Constancia de Situación Fiscal (CSF) con código QR',
@@ -855,8 +855,8 @@ export default function GuiaDocumentacionPage() {
       </section>
 
       {/* CHECKLIST DESCARGABLE */}
-      <section className="py-24 bg-[#0a0a0a] border-y border-white/5">
-        <div className="max-w-4xl mx-auto px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#0a0a0a] border-y border-white/5">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-[#050505] border-2 border-[#22AADE]/30 rounded-sm p-8 md:p-10">
             <div className="text-center mb-8">
               <div className="w-16 h-16 bg-[#22AADE]/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -913,29 +913,31 @@ export default function GuiaDocumentacionPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-[#050505] relative overflow-hidden">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#050505] relative overflow-hidden">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-[300px] bg-gradient-to-t from-[#22AADE]/10 to-transparent blur-[80px]" />
 
-        <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-          <h2 className="text-3xl md:text-5xl font-extralight text-white mb-6 tracking-tighter">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extralight text-white mb-4 sm:mb-6 tracking-tighter px-4">
             ¿Necesitas asesoría{' '}
             <span className="font-bold italic">legal inmobiliaria?</span>
           </h2>
-          <p className="text-lg mb-10 text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg mb-6 sm:mb-10 text-gray-400 font-light max-w-2xl mx-auto px-4">
             Te conectamos con notarios y abogados especializados para que tu operación sea
             segura, legal y transparente desde el primer documento.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center px-4">
             <Link
               href="/contacto"
-              className="px-10 py-4 bg-white text-black font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-[#22AADE] transition-all rounded-sm"
+              className="px-8 sm:px-10 py-3.5 sm:py-4 bg-white text-black font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-[#22AADE] active:scale-95 transition-all rounded-sm touch-manipulation"
+              style={{ minHeight: '48px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               Contactar Asesor Legal
             </Link>
             <Link
               href="/herramientas/checklist-propiedad"
-              className="px-10 py-4 border border-white/30 text-white font-bold text-[11px] uppercase tracking-[0.2em] hover:border-[#22AADE] hover:text-[#22AADE] transition-all rounded-sm"
+              className="px-8 sm:px-10 py-3.5 sm:py-4 border border-white/30 text-white font-bold text-[11px] uppercase tracking-[0.2em] hover:border-[#22AADE] hover:text-[#22AADE] active:scale-95 transition-all rounded-sm touch-manipulation"
+              style={{ minHeight: '48px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             >
               Evaluar Mi Propiedad
             </Link>

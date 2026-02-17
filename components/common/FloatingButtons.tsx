@@ -29,11 +29,12 @@ export default function FloatingButtons() {
         href="https://wa.me/525512345678?text=Hola,%20me%20gustaría%20obtener%20más%20información"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all hover:scale-110 z-50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-green-500 text-white p-3 sm:p-4 rounded-full shadow-lg hover:bg-green-600 active:scale-95 transition-all z-50 touch-manipulation"
+        style={{ minWidth: '48px', minHeight: '48px' }}
         aria-label="Contactar por WhatsApp"
       >
         <svg
-          className="w-6 h-6"
+          className="w-5 h-5 sm:w-6 sm:h-6"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -44,9 +45,10 @@ export default function FloatingButtons() {
       {/* Scroll to Top Button */}
       <button
         onClick={scrollToTop}
-        className={`fixed bottom-6 left-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 z-50 ${
+        className={`fixed bottom-4 left-4 sm:bottom-6 sm:left-6 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 active:scale-95 transition-all z-50 touch-manipulation ${
           showScrollTop ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
+        style={{ minWidth: '48px', minHeight: '48px' }}
         aria-label="Volver arriba"
       >
         <svg

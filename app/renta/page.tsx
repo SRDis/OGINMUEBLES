@@ -11,26 +11,26 @@ export default function RentaPage() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
       
       {/* 1. CINEMATIC HEADER */}
-      <header className="relative pt-32 pb-16 overflow-hidden border-b border-white/5">
+      <header className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 overflow-hidden border-b border-white/5">
         {/* Glow de fondo esmeralda muy sutil para diferenciar de Venta */}
         <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6">
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="w-12 h-[1px] bg-[#22AADE]" />
-                <span className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="w-8 sm:w-12 h-[1px] bg-[#22AADE]" />
+                <span className="text-[#22AADE] text-[9px] sm:text-[10px] font-bold tracking-[0.4em] sm:tracking-[0.5em] uppercase">
                   Estilo de Vida & Confort
                 </span>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-none mb-6">
-                Propiedades en <br />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extralight tracking-tighter leading-[0.95] sm:leading-none mb-4 sm:mb-6">
+                Propiedades en <br className="hidden sm:block" />
                 <span className="font-bold italic text-white">Renta</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
                 Selección exclusiva de propiedades gestionadas bajo estándares de <span className="text-white font-medium">hospitalidad premium</span>. 
                 Encuentra el refugio perfecto con la seguridad de un proceso transparente.
               </p>
@@ -56,7 +56,7 @@ export default function RentaPage() {
       </main>
 
       {/* 3. RENTAL EXPERIENCE (Diferenciadores de Servicio) */}
-      <section className="py-24 bg-[#050505]">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#050505]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="md:col-span-1">
@@ -88,7 +88,7 @@ export default function RentaPage() {
       </section>
 
       {/* 4. SERVICIO ALIADO — CHEF EN CASA & CATERING */}
-      <section className="py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#0a0a0a] relative overflow-hidden border-t border-white/5">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 blur-[120px] rounded-full pointer-events-none" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

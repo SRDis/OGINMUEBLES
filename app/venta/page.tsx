@@ -11,26 +11,26 @@ export default function VentaPage() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
       
       {/* 1. ELEGANT HEADER */}
-      <header className="relative pt-32 pb-16 overflow-hidden border-b border-white/5">
+      <header className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 overflow-hidden border-b border-white/5">
         {/* Glow de fondo para profundidad tecnológica */}
         <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 sm:gap-6">
             <div className="max-w-3xl">
-              <div className="flex items-center gap-3 mb-6">
-                <span className="w-12 h-[1px] bg-[#22AADE]" />
-                <span className="text-[#22AADE] text-[10px] font-bold tracking-[0.5em] uppercase">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+                <span className="w-8 sm:w-12 h-[1px] bg-[#22AADE]" />
+                <span className="text-[#22AADE] text-[9px] sm:text-[10px] font-bold tracking-[0.4em] sm:tracking-[0.5em] uppercase">
                   Adquisición & Patrimonio
                 </span>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-none mb-6">
-                Propiedades en <br />
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extralight tracking-tighter leading-[0.95] sm:leading-none mb-4 sm:mb-6">
+                Propiedades en <br className="hidden sm:block" />
                 <span className="font-bold italic text-white">Venta</span>
               </h1>
               
-              <p className="text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light leading-relaxed max-w-2xl">
                 Curaduría de residencias y terrenos con alto potencial de plusvalía. 
                 Utilizamos <span className="text-white font-medium">inteligencia de mercado</span> para garantizar que tu inversión sea sólida y segura.
               </p>

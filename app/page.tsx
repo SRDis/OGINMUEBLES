@@ -73,7 +73,7 @@ export default async function Home() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
       
       {/* 1. HERO SECTION: Cinemática y Autoridad */}
-      <section className="relative h-[95vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[85vh] sm:h-[90vh] md:h-[95vh] flex items-center justify-center overflow-hidden">
         {/* Fondo con Efecto Parallax sutil */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/30 via-transparent to-[#050505] z-10" />
@@ -86,28 +86,30 @@ export default async function Home() {
           />
         </div>
         
-        <div className="relative z-20 max-w-7xl mx-auto px-6 text-center">
-          <span className="inline-block py-1 px-3 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-6 backdrop-blur-md">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 text-center">
+          <span className="inline-block py-1.5 px-3 sm:px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold mb-4 sm:mb-6 backdrop-blur-md">
             Real Estate Advisory
           </span>
-          <h1 className="text-5xl md:text-8xl font-extralight tracking-tighter leading-[0.9] mb-8">
-           Tu Inversión Inmobiliaria <br />
+          <h1 className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-extralight tracking-tighter leading-[0.95] sm:leading-[0.9] mb-4 sm:mb-8 px-2">
+           Tu Inversión Inmobiliaria <br className="hidden sm:block" />
             <span className="font-bold text-white drop-shadow-lg">Segura y Rentable</span>
           </h1>
-          <p className="text-lg md:text-xl mb-10 text-gray-300 font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-10 text-gray-300 font-light max-w-2xl mx-auto leading-relaxed px-4">
             Protegemos tu patrimonio mediante selección experta y datos transparentes que reducen riesgos al mínimo.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-5 justify-center px-4">
             <Link
               href="/propiedades"
-              className="bg-[#22AADE] text-black px-10 py-4 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white transition-all duration-300 shadow-[0_0_20px_rgba(34,170,222,0.4)]"
+              className="bg-[#22AADE] text-black px-8 sm:px-10 py-3.5 sm:py-4 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(34,170,222,0.4)] touch-manipulation"
+              style={{ minHeight: '48px' }}
             >
               Ver Propiedades
             </Link>
             <Link
               href="/contacto"
-              className="bg-white/5 border border-white/20 text-white px-10 py-4 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white hover:text-black hover:border-white transition-all duration-300 backdrop-blur-sm"
+              className="bg-white/5 border border-white/20 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-sm font-bold text-[11px] uppercase tracking-[0.2em] hover:bg-white hover:text-black hover:border-white active:scale-95 transition-all duration-300 backdrop-blur-sm touch-manipulation"
+              style={{ minHeight: '48px' }}
             >
               Contactar Asesor
             </Link>
@@ -116,13 +118,14 @@ export default async function Home() {
       </section>
 
       {/* 2. QUICK SEARCH: La "Isla" de Cristal Oscuro */}
-      <section className="relative z-30 -mt-24 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+      <section className="relative z-30 -mt-16 sm:-mt-20 md:-mt-24 px-4 sm:px-6">
+        <div className="max-w-6xl mx-auto bg-[#0a0a0a]/80 backdrop-blur-2xl border border-white/10 rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/5">
             {/* Opción 1: Comprar */}
             <Link
               href="/venta"
-              className="group p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 transition-colors duration-500"
+              className="group p-6 sm:p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 active:bg-[#22AADE]/10 transition-colors duration-500 touch-manipulation"
+              style={{ minHeight: '120px' }}
             >
               <div className="mb-4 text-[#22AADE] group-hover:scale-110 transition-transform duration-500">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
@@ -134,10 +137,11 @@ export default async function Home() {
             {/* Opción 2: Rentar */}
             <Link
               href="/renta"
-              className="group p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 transition-colors duration-500"
+              className="group p-6 sm:p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 active:bg-[#22AADE]/10 transition-colors duration-500 touch-manipulation"
+              style={{ minHeight: '120px' }}
             >
-              <div className="mb-4 text-[#22AADE] group-hover:scale-110 transition-transform duration-500">
-                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
+              <div className="mb-3 sm:mb-4 text-[#22AADE] group-hover:scale-110 transition-transform duration-500">
+                <svg className="w-7 h-7 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
               </div>
               <h3 className="text-white text-sm font-bold uppercase tracking-[0.2em] mb-1">Rentar</h3>
               <p className="text-gray-500 text-xs font-light">Estancias de largo y corto plazo</p>
@@ -146,7 +150,8 @@ export default async function Home() {
             {/* Opción 3: Asesoría */}
             <Link
               href="/contacto"
-              className="group p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 transition-colors duration-500"
+              className="group p-6 sm:p-8 flex flex-col items-center text-center hover:bg-[#22AADE]/5 active:bg-[#22AADE]/10 transition-colors duration-500 touch-manipulation"
+              style={{ minHeight: '120px' }}
             >
               <div className="mb-4 text-[#22AADE] group-hover:scale-110 transition-transform duration-500">
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>

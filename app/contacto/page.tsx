@@ -10,42 +10,42 @@ export default function ContactoPage() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
       
       {/* 1. HERO SECTION: Direct & Professional */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[#22AADE]/5 blur-[120px] rounded-full pointer-events-none -z-10" />
         
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-7xl font-extralight tracking-tighter leading-none mb-6">
-            Iniciemos una <br />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-extralight tracking-tighter leading-[0.95] sm:leading-none mb-4 sm:mb-6">
+            Iniciemos una <br className="hidden sm:block" />
             <span className="font-bold italic text-white text-[#22AADE]">Conversación</span>
           </h1>
-          <p className="text-lg md:text-xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light max-w-2xl mx-auto leading-relaxed px-4">
             Ya sea una inversión patrimonial o la venta de una propiedad exclusiva, 
             estoy aquí para diseñar la estrategia que necesitas.
           </p>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-16 md:pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
           
           {/* 2. CONTACT INFO: Minimalist Cards */}
           <div className="lg:col-span-1 space-y-4">
             
             {/* Direct Channels */}
-            <div className="bg-[#0a0a0a] border border-white/5 p-8 rounded-sm group hover:border-[#22AADE]/30 transition-all">
-              <h3 className="text-[#22AADE] text-[10px] font-bold tracking-[0.4em] uppercase mb-6">Canales Directos</h3>
+            <div className="bg-[#0a0a0a] border border-white/5 p-6 sm:p-8 rounded-sm group hover:border-[#22AADE]/30 transition-all">
+              <h3 className="text-[#22AADE] text-[9px] sm:text-[10px] font-bold tracking-[0.3em] sm:tracking-[0.4em] uppercase mb-4 sm:mb-6">Canales Directos</h3>
               
-              <div className="space-y-6">
+              <div className="space-y-5 sm:space-y-6">
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">WhatsApp & Tel</p>
-                  <a href="tel:+525512345678" className="text-xl font-light hover:text-[#22AADE] transition-colors tracking-tight">
+                  <a href="tel:+525512345678" className="text-lg sm:text-xl font-light hover:text-[#22AADE] active:text-[#22AADE] transition-colors tracking-tight touch-manipulation block" style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}>
                     +52 55 1234 5678
                   </a>
                 </div>
                 
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Email Profesional</p>
-                  <a href="mailto:oliver@tu-dominio.com" className="text-xl font-light hover:text-[#22AADE] transition-colors tracking-tight">
+                  <a href="mailto:oliver@tu-dominio.com" className="text-lg sm:text-xl font-light hover:text-[#22AADE] active:text-[#22AADE] transition-colors tracking-tight touch-manipulation block break-all" style={{ minHeight: '44px', display: 'flex', alignItems: 'center' }}>
                     oliver@tu-dominio.com
                   </a>
                 </div>
@@ -53,7 +53,7 @@ export default function ContactoPage() {
             </div>
 
             {/* Valle de Bravo Presence */}
-            <div className="bg-[#0a0a0a] border border-white/5 p-8 rounded-sm">
+            <div className="bg-[#0a0a0a] border border-white/5 p-6 sm:p-8 rounded-sm">
               <h3 className="text-[#22AADE] text-[10px] font-bold tracking-[0.4em] uppercase mb-4">Ubicación Estratégica</h3>
               <p className="text-gray-400 font-light leading-relaxed">
                 Presencia activa en <span className="text-white">Valle de Bravo</span> y <span className="text-white">CDMX</span>.<br />

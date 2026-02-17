@@ -18,8 +18,8 @@ export default function Footer() {
       {/* Decoración de fondo sutil (Glow) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-[#22AADE]/30 to-transparent" />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 lg:gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10 md:gap-12 lg:gap-8">
           
           {/* 1. COMPANY INFO & BRANDING */}
           <div className="col-span-1 md:col-span-2 pr-0 md:pr-12">
@@ -65,7 +65,7 @@ export default function Footer() {
             <h3 className="text-white text-[10px] uppercase tracking-[0.25em] font-bold mb-6 border-b border-white/10 pb-2 inline-block">
               Navegación
             </h3>
-            <ul className="space-y-3">
+            <ul className="space-y-2.5 sm:space-y-3">
               {[
                 { name: 'Todas las Propiedades', href: '/propiedades' },
                 { name: 'Portafolio Venta', href: '/venta' },
@@ -82,7 +82,8 @@ export default function Footer() {
                 <li key={link.name}>
                   <Link 
                     href={link.href} 
-                    className="text-sm font-light text-gray-400 hover:text-[#22AADE] hover:pl-2 transition-all duration-300 flex items-center gap-2"
+                    className="text-sm font-light text-gray-400 hover:text-[#22AADE] active:text-[#22AADE] hover:pl-2 transition-all duration-300 flex items-center gap-2 touch-manipulation py-1.5"
+                    style={{ minHeight: '44px' }}
                   >
                     <span className="w-1 h-1 rounded-full bg-[#22AADE] opacity-0 hover:opacity-100 transition-opacity"/>
                     {link.name}

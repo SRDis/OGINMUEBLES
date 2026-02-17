@@ -451,22 +451,22 @@ export default function AcademiaPage() {
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#22AADE] selection:text-black">
 
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[700px] bg-[#22AADE]/5 blur-[140px] rounded-full pointer-events-none -z-10" />
         <div className="absolute top-40 right-0 w-[400px] h-[400px] bg-purple-600/5 blur-[120px] rounded-full pointer-events-none -z-10" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <span className="inline-block py-1 px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-8 backdrop-blur-md">
+            <span className="inline-block py-1.5 px-3 sm:px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold mb-6 sm:mb-8 backdrop-blur-md">
               Cursos · Guías · Recursos · Herramientas
             </span>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-extralight tracking-tighter leading-[0.95] mb-8">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight tracking-tighter leading-[0.95] mb-6 sm:mb-8 px-4">
               Academia{' '}
               <span className="font-bold italic text-[#22AADE]">Inmobiliaria</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-10">
+            <p className="text-base sm:text-lg md:text-xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed mb-6 sm:mb-10 px-4">
               Contenido educativo diseñado para que tomes{' '}
               <strong className="text-white">mejores decisiones inmobiliarias</strong>, ya seas comprador, inversionista o asesor profesional.
               Recursos gratuitos y cursos premium creados por expertos del sector.

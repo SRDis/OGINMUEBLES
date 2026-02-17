@@ -345,7 +345,8 @@ export default function MaintenanceServiceForm() {
           <button
             type="submit"
             disabled={loading || !formData.acceptPrivacy || formData.services.length === 0}
-            className="w-full bg-gradient-to-r from-[#22AADE] to-[#1a9ad6] text-black font-bold py-4 px-6 rounded-lg hover:from-[#1a9ad6] hover:to-[#22AADE] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] duration-300 text-sm uppercase tracking-wider"
+            className="w-full bg-gradient-to-r from-[#22AADE] to-[#1a9ad6] text-black font-bold py-3.5 sm:py-4 px-5 sm:px-6 rounded-lg hover:from-[#1a9ad6] hover:to-[#22AADE] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl duration-300 text-sm uppercase tracking-wider touch-manipulation"
+            style={{ minHeight: '48px' }}
           >
             {loading ? (
               <>

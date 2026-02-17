@@ -10,7 +10,7 @@ export default function NosotrosPage() {
     <div className="min-h-screen bg-[#050505] text-gray-300 selection:bg-[#22AADE] selection:text-black font-sans">
       
       {/* 1. HERO SECTION: Personal Branding */}
-      <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden pt-20">
+      <section className="relative min-h-[70vh] sm:min-h-[80vh] flex items-center justify-center overflow-hidden pt-20 sm:pt-24">
         {/* Background Effects */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-10" />
@@ -23,24 +23,24 @@ export default function NosotrosPage() {
           />
         </div>
 
-        <div className="relative z-20 max-w-5xl mx-auto px-6 text-center">
-          <span className="inline-block py-1 px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[10px] tracking-[0.4em] uppercase font-bold mb-8 backdrop-blur-md animate-fade-in">
+        <div className="relative z-20 max-w-5xl mx-auto px-4 sm:px-6 text-center">
+          <span className="inline-block py-1.5 px-3 sm:px-4 border border-[#22AADE]/30 rounded-full bg-[#22AADE]/10 text-[#22AADE] text-[9px] sm:text-[10px] tracking-[0.3em] sm:tracking-[0.4em] uppercase font-bold mb-6 sm:mb-8 backdrop-blur-md animate-fade-in">
             Valle de Bravo • México
           </span>
           
-          <img src="./logo-white.png" alt="Oliver López Guijoza" className="w-80 h-auto  mx-auto   shadow-lg" />
+          <img src="./logo-white.png" alt="Oliver López Guijoza" className="w-64 sm:w-80 h-auto mx-auto shadow-lg" />
           
-          <div className="w-24 h-[2px] bg-[#22AADE] mx-auto mb-8" />
+          <div className="w-20 sm:w-24 h-[2px] bg-[#22AADE] mx-auto mb-6 sm:mb-8" />
           
-          <p className="text-lg md:text-2xl font-light text-white tracking-wide max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-2xl font-light text-white tracking-wide max-w-3xl mx-auto px-4">
             "Estrategia, confianza y resultados en bienes raíces."
           </p>
         </div>
       </section>
 
       {/* 2. BIO & PHILOSOPHY: Editorial Layout */}
-      <section className="py-24 bg-[#050505]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      <section className="py-12 sm:py-16 md:py-24 bg-[#050505]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
             {/* Columna de Texto */}

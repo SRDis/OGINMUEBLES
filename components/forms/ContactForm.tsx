@@ -250,8 +250,9 @@ export default function ContactForm({ propertyId, propertyTitle, propertyInterna
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all"
+              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all text-base"
               placeholder="Tu nombre completo"
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -268,8 +269,9 @@ export default function ContactForm({ propertyId, propertyTitle, propertyInterna
               required
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all"
+              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all text-base"
               placeholder="tu@ejemplo.com"
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -286,8 +288,9 @@ export default function ContactForm({ propertyId, propertyTitle, propertyInterna
               required
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all"
+              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all text-base"
               placeholder="55 1234 5678"
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -304,8 +307,9 @@ export default function ContactForm({ propertyId, propertyTitle, propertyInterna
               rows={5}
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all resize-y"
+              className="w-full px-4 py-3 bg-[#050505] border border-white/20 rounded-lg text-white placeholder-gray-500 focus:ring-2 focus:ring-[#22AADE] focus:border-[#22AADE] transition-all resize-y text-base"
               placeholder="Me gustaría saber más sobre esta propiedad, agendar una visita, o recibir información sobre financiamiento..."
+              style={{ fontSize: '16px' }}
             />
           </div>
 
@@ -331,7 +335,8 @@ export default function ContactForm({ propertyId, propertyTitle, propertyInterna
           <button
             type="submit"
             disabled={loading || !formData.acceptPrivacy}
-            className="w-full bg-gradient-to-r from-[#22AADE] to-[#1a9ad6] text-black font-bold py-4 px-6 rounded-lg hover:from-[#1a9ad6] hover:to-[#22AADE] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl transform hover:scale-[1.02] duration-300 text-sm uppercase tracking-wider"
+            className="w-full bg-gradient-to-r from-[#22AADE] to-[#1a9ad6] text-black font-bold py-3.5 sm:py-4 px-5 sm:px-6 rounded-lg hover:from-[#1a9ad6] hover:to-[#22AADE] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl duration-300 text-sm uppercase tracking-wider touch-manipulation"
+            style={{ minHeight: '48px' }}
           >
             {loading ? (
               <>
